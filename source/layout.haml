@@ -1,0 +1,48 @@
+!!!
+
+%html
+  %head
+    - description = 
+    - title = "Letters: The tiny debugging library for Ruby"
+
+    %title= title 
+    %meta(name="description" content=description)/
+    %meta(property="og:title" content=title)/
+    -# %meta(property="og:image" content=image)/
+    -# %link(rel='icon' type='image/png' href='/images/logo-thumb.png')/
+
+    %link(rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.7.1/build/cssreset/cssreset-min.css")/
+    %link(rel="stylesheet" type="text/css" href="stylesheets/sh/themes/shCoreRDark.css")/
+    %link(rel="stylesheet" type="text/css" href=stylesheet)/
+
+    %link(href="http://fonts.googleapis.com/css?family=Headland+One|Skranji:400,700" rel="stylesheet" type="text/css")/
+
+    %script(src="javascripts/jquery.js" type="application/javascript")
+    %script(src="javascripts/lettering.js" type="application/javascript")
+    %script(src="javascripts/sh/shCore.js" type="application/javascript")
+    %script(src="javascripts/sh/shBrushRuby.js" type="application/javascript")
+    %script(src="javascripts/sh/shBrushPlain.js" type="application/javascript")
+    %script(src="javascripts/application.js" type="application/javascript")
+
+  %body
+    %a(href="https://github.com/davejacobs/letters")
+      %img(style="position: absolute; top: 0; right: 0; border: 0;" src="images/forkme.png" alt="Fork me on GitHub")
+
+    .wrapper
+      .header
+        .title
+          %h1 Letters
+          %h2 A tiny debugging library for Ruby
+
+        .navigation
+          %ul
+            %li
+              %a(href="index.html") Overview
+            %li
+              %a(href="api.html") The API
+            %li
+              %a(href="recipes.html") Recipes
+
+      .outer-content
+        .content
+          = content
