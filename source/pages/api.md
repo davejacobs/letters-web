@@ -73,7 +73,7 @@ Calling the expression will print the following in the [awesome print]() format:
 
 ### E (empty check) ###
 
-The `e` method is meant to quickly check if any expression is empty. One of two methods that does not always return its receiver, `e` will raise a `Letters::EmptyError` if its receiver is empty. (The other such method is `n`, used for nil checking.) Of course, if it is not empty, the receiver is passed through.
+The `e` method is meant to quickly check if an expression is empty. One of two methods that does not always return its receiver, `e` will raise a `Letters::EmptyError` if its receiver is empty. (The other such method is `n`, used for nil checking.) Of course, if it is not empty, the receiver is passed through.
 
     [].e
     # => raises Letters::EmptyError
@@ -117,12 +117,106 @@ The `l` method assumes you have an instance of a Ruby logger returned by the met
     :level => "info"
     :format => "yaml"
 
-- *M* - Mark with message to be printed when object is garbage-collected\*
-- *N* - Nil check -- raise error if receiver is nil
-- *O* - List all instantiated objects\*
-- *P* - Print to STDOUT (format can be default or specified)
-- *Q* - 
-- *R* - RI documentation for class
+### N (nil check) ###
+
+The `n` method is meant to quickly check if an expression is nil. One of two methods that does not always return its receiver, `n` will raise a `Letters::NilError` if its receiver is nil. (The other such method is `e`, used to check for empty objects.) Of course, if it is not nil, the receiver is passed through.
+
+    nil.n
+    # => raises Letters::NilError
+
+    [1, 2, 3].n
+    # => [1, 2, 3]
+
+### P (print to STDOUT) ###
+
+P is the `print` statement. (Well, actually, `puts`.) You know how to use this one.
+
+    [1, 2, 3].p
+    # => [1, 2, 3]
+
+By default, this will print the object to STDOUT in [awesome print](http://www.rubyinside.com/awesome_print-a-new-pretty-printer-for-your-ruby-objects-3208.html) format. To change the format, add a parameter to `p`:
+
+    [1, 2, 3].p(:format => "yaml")
+
+#### Options ####
+
+    :format => "ap"
+
+### R (RI) ###
+
+You've probably forgotten about RI, haven't you? It's that tool that comes with Ruby and is meant to make offline documentation easy.
+
+Because there are plenty of resources on the Internet, namely [RubyDoc](http://ruby-doc.org), people tend to disable RDoc generation. But context-switching from the terminal/keyboard to the browser/mouse can be disruptive. So Letters gives you the power to explore Ruby's documentation from the comfort of your own terminal. 
+
+To check out the documentation for an object's class, simply use the `r` method:
+
+    [1, 2, 3].r
+    # => [1, 2, 3]
+
+When you call this method, you will get the following in STDOUT:
+
+    #!plain
+    = Array < Object
+
+    ---------------------------------------------------
+    = Includes:
+    Enumerable (from ruby site)
+
+    (from ruby site)
+    ---------------------------------------------------
+    Arrays are ordered, integer-indexed collections of
+    any object. Array indexing starts at 0, as in C or
+    Java. A negative index is assumed to be relative
+    to the end of the array---that is, an index of -1
+    indicates the last element of the array, -2 is the
+    next to last element in the array, and so on.
+
+    ---------------------------------------------------
+    = Class methods:
+
+      [], new, try_convert
+
+    ... etc., etc. ...
+
+Not interested in learning what an array is? Pass in a method:
+
+    [1, 2, 3].r(:grep)
+    # => [1, 2, 3]
+
+Now you get more focused information:
+
+    #!plain
+    = Array#grep
+
+    (from ruby site)
+    === Implementation from Enumerable
+    --------------------------------------------------
+      enum.grep(pattern)                   -> array
+      enum.grep(pattern) {| obj | block }  -> array
+
+    --------------------------------------------------
+
+    Returns an array of every element in enum for
+    which Pattern === element. If the optional block
+    is supplied, each matching element is passed to
+    it, and the block's result is stored in the output
+    array.
+
+      (1..100).grep 38..44   #=> [38, 39, 40, 
+                                  41, 42, 43, 44]
+      c = IO.constants
+      c.grep(/SEEK/)         #=> [:SEEK_SET,
+                                  :SEEK_CUR,
+                                  :SEEK_END]
+
+      res = c.grep(/SEEK/) {|v| IO.const_get(v) }
+      res                    #=> [0, 1, 2]
+    
+If you're using RVM and need to generate your RDoc again, type the following in and go grab a coffee:
+
+    #!plain
+    rvm docs generate all
+
 - *S* - Bump [safety level]()
 - *T* - [Taint object]()
 - *U* - Untaint object
