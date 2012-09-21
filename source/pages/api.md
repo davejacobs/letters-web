@@ -62,14 +62,14 @@ The `d1/d2` method pair brings [`diff`](http://man.cx/diff) to your Ruby environ
 
     [1, 2, 3].d1.map {|x| x ** 2 }.d2
 
-Calling the expression will print the following in the [awesome print]() format:
+Calling the expression will print the following in the [Awesome Print]() format:
 
     { 
       removed: [2, 3],
       added: [4, 9]
     }
 
-`d` will also give an `updated` list for hashes.
+These methods will also give an `updated` list for hashes.
 
 ### E (empty check) ###
 
@@ -134,7 +134,7 @@ P is the `print` statement. (Well, actually, `puts`.) You know how to use this o
     [1, 2, 3].p
     # => [1, 2, 3]
 
-By default, this will print the object to STDOUT in [awesome print](http://www.rubyinside.com/awesome_print-a-new-pretty-printer-for-your-ruby-objects-3208.html) format. To change the format, add a parameter to `p`:
+By default, this will print the object to STDOUT in [Awesome Print](http://www.rubyinside.com/awesome_print-a-new-pretty-printer-for-your-ruby-objects-3208.html) format. To change the format, add a parameter to `p`:
 
     [1, 2, 3].p(:format => "yaml")
 
@@ -217,26 +217,87 @@ If you're using RVM and need to generate your RDoc again, type the following in 
     #!plain
     rvm docs generate all
 
-- *S* - Bump [safety level]()
-- *T* - [Taint object]()
-- *U* - Untaint object
-- *V* - 
-- *W* - 
-- *X* - Transmit control to nearest intercepter, passing object\*
-- *Y* - 
-- *Z* - 
+### S (bump safety level) ###
+
+Ruby's safety level is sort of like the US national security level. With an escalated safety level, it's harder to change things that should be easy, and nothing gets done. Really, the only difference between Ruby's security level and the United States' is that Ruby's does not default to Threat Level Orange.
+
+Though not often used, the safety level can be an englightening tool for debugging, both to gauge the attack vectors your code is vulnerable to, and to see how much user input you're relying on.
+
+For more information on the Ruby safety level, see the online [Pickaxe documentation](http://ruby-doc.org/docs/ProgrammingRuby/html/taint.html#S1).
+
+The `s` method will bump the safety level up by one. If supplied a specific number (0 - 4), it will try to change the safety level to that number. If the safety level cannot be changed, this method will raise an error.
+
+The `s` method is most interesting when combined with tainted objects.
+
+### T and U (taint and untaint) ###
+
+While not used every day, tainting and untainting objects gives us more control over what we allow through our code. In Ruby, tainted objects (mostly) represent user input and derived values. They can be tainted and untainted at will at the lower safety levels. 
+
+`t` and `u` are inverses of each other. Respectively, they taint and untaint their receiver objects.
+
+    [1, 2, 3].t.j { puts tainted? }
+    # => [1, 2, 3]
+    # Prints "true"
+
+    [1, 2, 3].t.u.j { puts tainted? }
+    # => [1, 2, 3]
+    # Prints "false"
+
+### W (write) ###
+
+The `w` method is a generalization of other output methods. It writes an arbitrary representation of its receiver to an arbitrary IO stream. (Any object that responds to `puts`.)
+
+You could build the `f` and `p` methods off of the `w` method. Here is a simplified version of `f`:
+
+    class Object
+      def f(opts={})
+        tap do |o|
+          File.open("log", "w+") do |file|
+            o.w(:stream => file, :format => opts[:format]) 
+          end
+        end
+      end
+    end
+
+#### Options ####
+
+    :stream => $stdout
+    :format => "yaml"
+
+### Z (jump & reveal) ###
+
+The `z` method is like the `j` method, except it prints the results of the last expression in the block.
+
+    [1, 2, 3].z { count }.reduce(:+)
+    # => 6
+
+Like the example for the `j` method, this expression will print 3 and return 6.
 
 Formats
 -------
 
 The following formats are supported. They can be specified by passing `format: "format"` to appropriate methods. 
 
+- Ruby Pretty Print (`format: "pp"`)
+- Ruby [Awesome Print](http://www.rubyinside.com/awesome_print-a-new-pretty-printer-for-your-ruby-objects-3208.html) (`format: "ap"`)
 - YAML (`format: "yaml"`)
 - JSON (`format: "json"`)
 - XML (`format: "xml"`)
-- Ruby Pretty Print (`format: "pp"`)
-- Ruby [Awesome print]() (`format: "ap"`)
 
-<hr />
+----------------------
 
-\*Requiring `"letters"` on its own will add the alphabet methods to these core classes: `Hash`, `Array`, `String`, `nil`. If you don't want to patch them with such small method names, you can explicitly require `"letters/core_ext"` instead. `Letters::CoreExt` will be available for you to `include` in any instance or class you'd like.
+\*Requiring `"letters"` on its own will add the alphabet methods to the following core classes:
+
+- `Numeric`
+- `Symbol`
+- `String`
+- `Regexp`
+- `Array`
+- `Set`
+- `Hash`
+- `Range`
+- `NilClass`
+- `TrueClass`
+- `FalseClass`
+
+If you don't want to patch them with such small method names, you can explicitly require `"letters/core_ext"` instead. `Letters::CoreExt` will be available for you to `include` in any instance or class you'd like.
