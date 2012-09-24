@@ -3,23 +3,54 @@ Title: The API
 The API
 -------
 
-Letters is a library dedicated to side effects. It is meant for debugging and patches core data structures with these methods. You can access these methods either by monkey-patching the core classes ...
+If you think about it, Letters is a library dedicated to side effects. It wants to stay out of your logic, to keep clear of application state. The purpose of Letters is to give you a window into an otherwise closed pipeline or code path, and to make that window as easy as possible to set up and tear down.
+
+Letters shouldn't stay in your code base, so it takes the liberty of patching Ruby's core data structures. This happens when you enter:
 
     require "letters"
 
-... or by including them a la carte:
+If you don't want to patch these classes, you can patch classes and objects a la carte:
 
     require "letters/patch"
     obj = Object.new
     Letters.patch! obj
 
+### A (assert) ###
+
+The `a` method stands apart from most other Letters methods. Why? Because it does not always return its receiver. `a` is used to craft assertions, and if an assertion fails, it raises an error. Two special cases of the `a` method are `e` and `n`, which assert that their receivers are not empty or nil (respectively). 
+
+The `a` method jumps into the context of its receiver, so all assertions can be made without explicitly referring to the object:
+
+    [1, 2, 3].a { count == 3 }
+    # => [1, 2, 3]
+
+Notice that you didn't have to pass a block argument in.
+
+Assertions will fail if the result of the block is not truthy (as defined by Ruby). That is, false or nil blocks will raise a `Letters::AssertionError`.
+
+    [1, 2, 3].a { count > 3 }
+    # Raises Letters::AssertionError
+
+    [1, 2, 3].a { nil }
+    # Raises Letters::AssertionError
+
+The `a` method can take a message that will be printed every time the assertion is made. It can also take an `Exception` class to be raised if the assertion fails.
+
+#### Options ####
+
+    :message => nil
+    :error_class => Letters::AssertionError
+
 ### B (beep) ###
 
 The `b` method causes your terminal to, well, beep. This one is mainly for fun but is also useful for coarse-grained time analysis. For example, you might leverage `b` to detect n + 1 SQL queries or other data manipulation that takes more than a few milliseconds.
 
-    (1..1_000_000_000).b.map(&:succ).b.reduce(:+).b
+    (1..100_000_000).b.map(&:succ).b.reduce(:+).b
+    # => 5000000150000000
 
 If your terminal supports the audible bell, this query will beep every time the pipeline reaches a `b` and will pass through the results to the next method.
+
+For more fine-grained time analysis, see the timestamp method, `t`.
 
 ### C (callstack) ###
 
@@ -46,6 +77,10 @@ In IRB, this prints:
 
 Again, this does not interrupt execution of your code -- it just lets you know where you are.
 
+#### Options ####
+
+    :message => nil
+
 ### D (debugger) ###
 
 We all know and love the debugger, but normal debugger calls are imperative. It can be a pain to break apart code to fit in a debugger. Instead, consider invoking `d` at the end of any expression:
@@ -62,14 +97,24 @@ The `d1/d2` method pair brings [`diff`](http://man.cx/diff) to your Ruby environ
 
     [1, 2, 3].d1.map {|x| x ** 2 }.d2
 
-Calling the expression will print the following in the [Awesome Print]() format:
+Calling the expression will print the following in the [Awesome Print](http://www.rubyinside.com/awesome_print-a-new-pretty-printer-for-your-ruby-objects-3208.html) format:
 
     { 
       removed: [2, 3],
       added: [4, 9]
     }
 
+For hashes, each value in the diff hash is also a hash:
+
+    { foo: "bar", baz: "bat" }.select 
+
 These methods will also give an `updated` list for hashes.
+
+#### Options for d2 ####
+
+    :message => nil
+    :format => "ap"
+    :stream => $stdout
 
 ### E (empty check) ###
 
@@ -81,9 +126,13 @@ The `e` method is meant to quickly check if an expression is empty. One of two m
     [1, 2, 3].e
     # => [1, 2, 3]
 
+#### Options ####
+
+    :message => nil
+
 ### F (write to file) ###
 
-Sometimes, you want to be able to manipulate the results of a method call in your favorite text editor. Maybe you want to use sophisticated Unix tools to a unnecessarily gigantic object. You could always stop to break apart your code, create a file block, remember the file flag options, and maybe break downstream code in the process. Or you could tag your object with `f`:
+Sometimes, you want to be able to manipulate the results of a method call in your favorite text editor. Maybe you want to use sophisticated Unix tools to pick apart an unnecessarily gigantic object. You could always stop to break open your code, create a file block, remember the file flag options, and accidentally change downstream code in the process. Or you could tag your object with `f`:
 
     JSON.parse(body).f.values_at(:name, :title)
 
@@ -101,9 +150,9 @@ See "Formats" below for all available formats.
 
 ### J (jump into object) ###
 
-The `j` method gives you a block in the context of the object it's called on. You can call any of the object's methods (in addition to `puts`, etc., for finer-grained debugging) without naming a receiver. Note that if you mutate the object, it will be mutated on the other side of the method.
+The `j` method gives you a block in the context of the object it's called on. You can call any of the object's methods (in addition to `puts`, etc., for finer-grained debugging) without naming a receiver. (You could be explicit and use `self`. But what does this look like, Python?) Note that if you mutate the object, it will be mutated on the other side of the method.
 
-    [1, 2, 3].j { puts count unless empty? }.reduce(:+)
+    [1, 2, 3].j { puts length unless empty? }.reduce(:+)
     # => 6
 
 This expression will print 3 and return 6.
@@ -114,8 +163,22 @@ The `l` method assumes you have an instance of a Ruby logger returned by the met
 
 #### Options ####
 
-    :level => "info"
     :format => "yaml"
+    :level => "info"
+
+### M (mark as tainted, untainted) ###
+
+While not used every day, tainting and untainting objects gives us more control over what we allow through our code. In Ruby, tainted objects (mostly) represent user input and derived values. They can be tainted and untainted at will at the lower safety levels. 
+
+`m` can taint or untaint its receiver object. Without an argument, `m` will taint its receiver. With a falsy argument, `m` will untaint its receiver.
+
+    [1, 2, 3].m.p { tainted? }
+    # => [1, 2, 3]
+    # Prints "true"
+
+    [1, 2, 3].m(true).m(false).p { tainted? }
+    # => [1, 2, 3]
+    # Prints "false"
 
 ### N (nil check) ###
 
@@ -138,9 +201,22 @@ By default, this will print the object to STDOUT in [Awesome Print](http://www.r
 
     [1, 2, 3].p(:format => "yaml")
 
+If a block is passed in, it will be executed "inside" of the object (like the `j` method), and the final result of the block will be printed out instead.
+
+The `j` example looked something like this:
+
+    [1, 2, 3].j { puts length unless empty? }.reduce(:+)
+
+With `p`, we could rewrite the expression as ...
+
+    [1, 2, 3].p { length unless empty? }.reduce(:+)
+    
+... for the same effect.
+
 #### Options ####
 
     :format => "ap"
+    :stream => $stdout
 
 ### R (RI) ###
 
@@ -178,7 +254,7 @@ When you call this method, you will get the following in STDOUT:
 
     ... etc., etc. ...
 
-Not interested in learning what an array is? Pass in a method:
+Not interested in learning what an array is? Pass in a method name:
 
     [1, 2, 3].r(:grep)
     # => [1, 2, 3]
@@ -229,49 +305,25 @@ The `s` method will bump the safety level up by one. If supplied a specific numb
 
 The `s` method is most interesting when combined with tainted objects.
 
-### T and U (taint and untaint) ###
+### T (timestamp) ###
 
-While not used every day, tainting and untainting objects gives us more control over what we allow through our code. In Ruby, tainted objects (mostly) represent user input and derived values. They can be tainted and untainted at will at the lower safety levels. 
+The `t` method will print out the current timestamp. This can be useful for identifying bottlenecks in code more precisely than with `b` but without the complexity of a profiler.
 
-`t` and `u` are inverses of each other. Respectively, they taint and untaint their receiver objects.
+    (1..100_000_000).t.map(&:succ).t.reduce(:+).t
+    # => 5000000150000000
 
-    [1, 2, 3].t.j { puts tainted? }
-    # => [1, 2, 3]
-    # Prints "true"
+This call prints something like:
 
-    [1, 2, 3].t.u.j { puts tainted? }
-    # => [1, 2, 3]
-    # Prints "false"
-
-### W (write) ###
-
-The `w` method is a generalization of other output methods. It writes an arbitrary representation of its receiver to an arbitrary IO stream. (Any object that responds to `puts`.)
-
-You could build the `f` and `p` methods off of the `w` method. Here is a simplified version of `f`:
-
-    class Object
-      def f(opts={})
-        tap do |o|
-          File.open("log", "w+") do |file|
-            o.w(:stream => file, :format => opts[:format]) 
-          end
-        end
-      end
-    end
+    #!plain
+    09/24/2012 13:35:15.282
+    09/24/2012 13:35:33.016
+    09/24/2012 13:35:43.172
 
 #### Options ####
 
-    :stream => $stdout
-    :format => "yaml"
+The `:time_format` option allows you to print timestamps in any time format [you've registered with ActiveSupport](http://ofps.oreilly.com/titles/9780596521424/active-support.html#id390940856542).
 
-### Z (jump & reveal) ###
-
-The `z` method is like the `j` method, except it prints the results of the last expression in the block.
-
-    [1, 2, 3].z { count }.reduce(:+)
-    # => 6
-
-Like the example for the `j` method, this expression will print 3 and return 6.
+    :time_format => "millis"
 
 Formats
 -------
@@ -300,4 +352,18 @@ The following formats are supported. They can be specified by passing `format: "
 - `TrueClass`
 - `FalseClass`
 
-If you don't want to patch them with such small method names, you can explicitly require `"letters/core_ext"` instead. `Letters::CoreExt` will be available for you to `include` in any instance or class you'd like.
+If you don't want to patch them with such small method names, you can explicitly require `"letters/patch"` instead. `Letters.patch!` will be available to patch any class or instance you like.
+
+If you do patch an instance, the letter methods will only be available on that instance and not on any derivative instances. For example, this will not work:
+
+    require "letters/patch"
+    arr = [1, 2, 3]
+    Letters.patch! arr
+
+    # Does not work
+    arr.p.map {|x| x ** 2 }.p
+
+The second call to `p` will fail because the derivative array (result of the `map` call) has not been patched. Of course, mutating the original array is one way to solve this problem, albeit error-prone:
+
+    # Works, but patching Array is probably better
+    arr.p.map! {|x| x ** 2 }.p
