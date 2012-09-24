@@ -110,16 +110,12 @@ body
 
       a
         display: block
-        padding: 5px 10px 2px 10px
-
-        &:link, &:visited
-          text-decoration: none
-          color: $secondary_color
-          padding-bottom: 7px
+        padding: 5px 10px 0px 10px
+        text-decoration: none
+        color: $secondary_color
 
         &:hover
-          padding-bottom: 2px
-          border-bottom: solid 4px $secondary_color
+          color: $secondary_color - #222
 
 .outer-content
   box-shadow:            1px 1px 1px 1px #fff
@@ -230,6 +226,15 @@ body
 
     &:first-child
       margin-top: 0
+
+  p 
+    a
+      text-decoration: none
+      color: $primary_color
+
+      &:hover
+        color: $primary_color - #111
+        text-decoration: underline
 
   p+p, pre+p, div+p
     text-indent: 1.5em
