@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+require "boson/runner"
+
+class GodRunner < Boson::Runner
+  def compile
+    puts `compass compile`
+  end
+end
+
+GodRunner.start

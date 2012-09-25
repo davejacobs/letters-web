@@ -1,5 +1,3 @@
-Title: The API
-
 The API
 -------
 
@@ -104,11 +102,18 @@ Calling the expression will print the following in the [Awesome Print](http://ww
       added: [4, 9]
     }
 
-For hashes, each value in the diff hash is also a hash:
+For hashes, each value in the diff is also a hash (and there is an `updated` key):
 
-    { foo: "bar", baz: "bat" }.select 
-
-These methods will also give an `updated` list for hashes.
+    { a: "foo", b: "bar", c: "baz" }.d1.select do |k, v|
+      k =~ /[ab]/
+    end.merge(:a => "new-foo", d: "bat").d2
+    # => { a: "new-foo", b: "bar" }
+    # Prints:
+    # {
+    #   added: { d: "bat" }
+    #   removed: { c: "baz" }
+    #   updated: { a: "new-foo" }
+    # }
 
 #### Options for d2 ####
 

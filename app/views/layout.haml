@@ -2,10 +2,7 @@
 
 %html
   %head
-    - description = 
-    - title = "Letters: The tiny debugging library for Ruby"
-
-    %title= title 
+    %title= "Letters: #{title}" 
     %meta(name="description" content=description)/
     %meta(property="og:title" content=title)/
     -# %meta(property="og:image" content=image)/
@@ -13,7 +10,7 @@
 
     %link(rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.7.1/build/cssreset/cssreset-min.css")/
     %link(rel="stylesheet" type="text/css" href="stylesheets/sh/themes/shCoreRDark.css")/
-    %link(rel="stylesheet" type="text/css" href=stylesheet)/
+    %link(rel="stylesheet" type="text/css" href="stylesheets/style.css")/
 
     %link(href="http://fonts.googleapis.com/css?family=Headland+One|Skranji:400,700" rel="stylesheet" type="text/css")/
 
@@ -38,11 +35,11 @@
           .navigation
             %ul
               %li
-                %a(href="index.html") Overview
+                %a(href="/") Overview
               %li
-                %a(href="api.html") The API
+                %a(href="/api") The API
               %li
-                %a(href="recipes.html") Recipes
+                %a(href="/recipes") Recipes
 
       .outer-content
         .content
