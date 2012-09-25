@@ -8,6 +8,7 @@ gem "unicorn"
 gem "rack-cache"
 
 gem "tilt"
+gem "compass"
 gem "sass"
 gem "haml"
 gem "rdiscount"
