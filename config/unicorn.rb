@@ -1,4 +1,4 @@
-worker_processes 4
+worker_processes 2
 
 # Load source into the master before forking workers
 # for super-fast worker spawn times
