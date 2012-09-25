@@ -13,6 +13,8 @@ GEM
       chunky_png (~> 1.2)
       fssm (>= 0.2.7)
       sass (~> 3.1)
+    fancy-buttons (1.2.0)
+      compass (>= 0.11)
     fssm (0.2.8.1)
     haml (3.1.7)
     highline (1.6.15)
@@ -54,6 +56,7 @@ DEPENDENCIES
   boson
   capistrano
   compass
+  fancy-buttons
   haml
   rack-cache
   rack_csrf

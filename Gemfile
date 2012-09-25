@@ -15,3 +15,5 @@ gem "haml"
 gem "rdiscount"
 
 gem "rake"
+
+gem "fancy-buttons"

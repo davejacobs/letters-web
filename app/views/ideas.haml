@@ -5,8 +5,9 @@
 %hr
 
 .ideas
-  %form(action="/ideas")
+  %form(action="/ideas" method="post")
     = csrf_tag
     %input(type="text" name="name" placeholder="Noam Chomsky")
     %input(type="email" name="name" placeholder="noam@chomsky.com")
     %textarea(placeholder="Given the generative nature of this library ... Lorem ipsum sic dolor Lorem ipsum sic dolor Lorem ipsum sic dolor Lorem ipsum sic dolor ")
+    %input(type="submit" value="Submit Idea")
