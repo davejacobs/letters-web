@@ -36,11 +36,11 @@ class LettersWeb < Sinatra::Application
     markdown :api, :layout => :layout, :layout_engine => :haml
   end
 
-  get "/ideas" do
-    @title = "Ideas"
-    @description = "Submit your idea for the next Letters method"
+  get "/resources" do
+    @title = "Resources"
+    @description = "Look no further for help with Letters"
 
     response["Cache-Control"] = "max-age=300, public"
-    haml :ideas
+    markdown :resources, :layout => :layout, :layout_engine => :haml
   end
 end
