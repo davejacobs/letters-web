@@ -1,0 +1,12 @@
+%h2 Submit an Idea
+
+%p Of course the best way to get your idea into Letters is to fork the project on Github and submit a pull request. Barring that, we'll listen to free-form ideas, too.
+
+%hr
+
+.ideas
+  %form(action="/ideas")
+    = csrf_tag
+    %input(type="text" name="name" placeholder="Noam Chomsky")
+    %input(type="email" name="name" placeholder="noam@chomsky.com")
+    %textarea(placeholder="Given the generative nature of this library ... Lorem ipsum sic dolor Lorem ipsum sic dolor Lorem ipsum sic dolor Lorem ipsum sic dolor ")

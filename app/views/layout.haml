@@ -2,9 +2,12 @@
 
 %html
   %head
+    - title = defined?(title) ? title : "The tiny debugging library for Ruby"
+    - description = defined?(description) ? description : "Letters brings Ruby debugging into the 21st century. It leverages print, the debugger, control transfer, even computer beeps to let you see into your code's state."
+
     %title= "Letters: #{title}" 
     %meta(name="description" content=description)/
-    %meta(property="og:title" content=title)/
+    %meta(property="og:title" content="Letters: #{title}")/
     -# %meta(property="og:image" content=image)/
     -# %link(rel='icon' type='image/png' href='/images/logo-thumb.png')/
 
@@ -39,8 +42,8 @@
               %li
                 %a(href="/api") The API
               %li
-                %a(href="/recipes") Recipes
+                %a(href="/ideas") Submit an Idea
 
       .outer-content
         .content
-          = content
+          = yield

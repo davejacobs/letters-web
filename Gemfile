@@ -6,6 +6,7 @@ gem "capistrano"
 gem "sinatra"
 gem "unicorn"
 gem "rack-cache"
+gem "rack_csrf"
 
 gem "tilt"
 gem "compass"
