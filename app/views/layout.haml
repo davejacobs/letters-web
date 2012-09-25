@@ -2,8 +2,8 @@
 
 %html
   %head
-    - title = defined?(title) ? title : "The tiny debugging library for Ruby"
-    - description = defined?(description) ? description : "Letters brings Ruby debugging into the 21st century. It leverages print, the debugger, control transfer, even computer beeps to let you see into your code's state."
+    - title = defined?(@title) ? @title : "The tiny debugging library for Ruby"
+    - description = defined?(@description) ? @description : "Letters brings Ruby debugging into the 21st century. It leverages print, the debugger, control transfer, even computer beeps to let you see into your code's state."
 
     %title= "Letters: #{title}" 
     %meta(name="description" content=description)/
