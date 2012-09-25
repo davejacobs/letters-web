@@ -13,6 +13,8 @@ listen '/home/david/www/lettersrb.com/current/tmp/sockets/unicorn.sock', :backlo
 stdout_path "/home/david/www/lettersrb.com/current/log/unicorn.stdout.log"
 stderr_path "/home/david/www/lettersrb.com/current/log/unicorn.stderr.log"
 
+pid "#{shared_path}/pids/unicorn.pid"
+
 before_fork do |server, worker|
   old_pid = 'tmp/pids/unicorn.pid.oldbin'
   if File.exists?(old_pid) && server.pid != old_pid

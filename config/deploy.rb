@@ -92,7 +92,7 @@ end
 
 # Server - Unicorn
 namespace :unicorn do
-  set :unicorn_pid, 'tmp/pids/unicorn.pid'
+  set :unicorn_pid, "#{shared_path}/pids/unicorn.pid"
 
   desc "start unicorn master"
   task :start do 
@@ -101,7 +101,7 @@ namespace :unicorn do
   end
 
   task :stop do 
-    run_in_current "kill -9 $(cat #{unicorn_pid})"
+    run_in_current "[ -f #{unicorn_pid} ] && kill -9 $(cat #{unicorn_pid})"
   end
 
   task :graceful_stop do
