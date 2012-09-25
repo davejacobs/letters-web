@@ -1,6 +1,7 @@
 source :rubygems
 
 gem "boson"
+gem "capistrano"
 
 gem "sinatra"
 gem "unicorn"
@@ -10,3 +11,5 @@ gem "tilt"
 gem "sass"
 gem "haml"
 gem "rdiscount"
+
+gem "rake"
