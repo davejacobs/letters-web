@@ -7,6 +7,8 @@ preload_app true
 # Restart any workers that haven't responded in 30 seconds
 timeout 5
 
+shared_path = "/home/david/www/lettersrb.com/shared"
+
 # Listen on a Unix data socket
 listen '/home/david/www/lettersrb.com/current/tmp/sockets/unicorn.sock', :backlog => 2048
 
