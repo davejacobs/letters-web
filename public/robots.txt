@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Allow: /api
+Allow: /resources
+
+Sitemap: http://lettersrb.com/sitemap.xml
