@@ -20,4 +20,9 @@ $(function() {
     "quick-code": false,
     "auto-links": false
   });
+
+  $("h3").each(function(index, h3) {
+    $h3 = $(h3);
+    $h3.attr("id", $h3.text().split(" ")[0].toLowerCase());
+  });
 });
