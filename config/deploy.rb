@@ -31,7 +31,7 @@ set :application,     'letters-web'
 
 # Ruby version management
 set :rvm_type,        :user
-set :rvm_ruby_string, '1.9.2@web'
+set :rvm_ruby_string, '1.9.3@letters-web'
 
 role :web,            domain
 role :app,            domain
