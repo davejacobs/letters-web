@@ -90,6 +90,12 @@ namespace :servers do
   end
 end
 
+namespace :css do
+  task :compile do
+    run_in_current "compass compile"
+  end
+end
+
 # Server - Unicorn
 namespace :unicorn do
   set :unicorn_pid, "#{shared_path}/pids/unicorn.pid"
@@ -154,6 +160,7 @@ before 'deploy:cold',        'deploy:setup'
 
 # Only keep latest releases
 after 'deploy',              'deploy:cleanup'
+after 'deploy',              'css:compile'
 
 # Link old server config if we rollback
 after 'rollback:default',    'servers:link:config'
