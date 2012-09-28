@@ -2,6 +2,12 @@
 
 For many of us, troubleshooting begins and ends with the `print` statement. Others recruit the debugger, too. (Maybe you use `print` statements to look at changes over time but the debugger to focus on a small bit of code.) These tools are good, but they are the lowest level of how we can debug in Ruby. Letters leverages `print`, the debugger, control transfer, computer beeps, and other side-effects for more well-rounded visibility into code and state.
 
+If you want a thorough introduction, check out the screencast:
+
+<a class="fancybox-media" rel="media-gallery" href="https://vimeo.com/50347457">
+  <img src="/images/still.png" />
+</a>
+
 ### Installation ###
 
 If you're using RubyGems, install Letters with:

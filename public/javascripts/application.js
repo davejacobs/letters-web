@@ -25,4 +25,14 @@ $(function() {
     $h3 = $(h3);
     $h3.attr("id", $h3.text().split(" ")[0].toLowerCase());
   });
+
+  $(".fancybox-media").fancybox({
+    width: 1000,
+    height: 625,
+    openEffect: "fade",
+    closeEffect: "fade",
+    helpers: {
+      media: {}
+    } 
+  });
 });
