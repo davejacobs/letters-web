@@ -6,7 +6,7 @@ Resources
 If you have questions about Letters, you have a couple of options:
 
 - Mailing list: [lettersrb@googlegroups.com](https://groups.google.com/forum/#!forum/lettersrb)
-- IRC (on Freenode): [#lettersrb](irc://irc.freenode.net/letters)
+- IRC (on Freenode): [#letters](irc://irc.freenode.net/letters)
 
 ### Contributing ###
 
