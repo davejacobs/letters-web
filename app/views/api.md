@@ -7,7 +7,9 @@ Letters shouldn't stay in your code base, so it takes the liberty of patching `O
 
     require "letters"
 
-If you're in a Rails app, do this before Bundler loads all of your other gems -- like at the top of `boot.rb`.
+For Rails apps, there may be conflicts with the `t` method in `ActionPack`. To handle that conflict, do not require all of Letters. Instead:
+
+    require "letters/patch/rails"
 
 If you don't want to patch everything, you can patch classes and objects a la carte:
 
