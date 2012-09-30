@@ -3,13 +3,14 @@ The API
 
 If you think about it, Letters is a library dedicated to side effects. It wants to stay out of your logic, to keep clear of application state. The purpose of Letters is to give you a window into an otherwise closed pipeline or code path, and to make that window as easy as possible to set up and tear down.
 
-Letters shouldn't stay in your code base, so it takes the liberty of patching Ruby's core data structures. This happens when you enter:
+Letters shouldn't stay in your code base, so it takes the liberty of patching `Object`. This happens when you enter:
 
     require "letters"
 
-If you don't want to patch these classes, you can patch classes and objects a la carte:
+If you don't want to patch everything, you can patch classes and objects a la carte:
 
     require "letters/patch"
+    Letters.patch! Hash
     obj = Object.new
     Letters.patch! obj
 
@@ -343,19 +344,9 @@ The following formats are supported. They can be specified by passing `format: "
 
 ----------------------
 
-\*Requiring `"letters"` on its own will add the alphabet methods to the following core classes:
+\*Requiring `"letters"` on its own will add the alphabet methods to `Object`.
 
-- `Numeric`
-- `Symbol`
-- `String`
-- `Regexp`
-- `Array`
-- `Set`
-- `Hash`
-- `Range`
-- `NilClass`
-- `TrueClass`
-- `FalseClass`
+To patch just the core classes, `require "letters/patch/core"`.
 
 If you don't want to patch them with such small method names, you can explicitly require `"letters/patch"` instead. `Letters.patch!` will be available to patch any class or instance you like.
 
