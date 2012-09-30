@@ -7,6 +7,8 @@ Letters shouldn't stay in your code base, so it takes the liberty of patching `O
 
     require "letters"
 
+If you're in a Rails app, do this before Bundler loads all of your other gems -- like at the top of `boot.rb`.
+
 If you don't want to patch everything, you can patch classes and objects a la carte:
 
     require "letters/patch"
