@@ -36,7 +36,7 @@ That's simple enough, but not really useful. Things get interesting when you're 
     words.grep(/interesting/).
       map(&:downcase).
       group_by(&:length).
-      values_at(5, 10)
+      values_at(5, 10).
       slice(0..2).
       join(", ")
     
@@ -46,7 +46,7 @@ If I want to know the state of your code after lines 3 and 5, all I have to do i
     words.grep(/interesting/).
       map(&:downcase).
       group_by(&:length).p.
-      values_at(5, 10)
+      values_at(5, 10).
       slice(0..2).p.
       join(", ")
 
