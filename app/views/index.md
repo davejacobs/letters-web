@@ -55,3 +55,7 @@ Because the `p` method (and nearly every Letters method) returns the original ob
 This is significantly easier than breaking apart the pipeline using variable assignment or a hefty `tap` block.
 
 The `p` method takes options, too, so you can add a prefix message to the output or choose another output format -- like [YAML]() or [pretty print]().
+
+### ... and the rest of the world ###
+
+There are plenty of other alphabetical methods to [explore on the API page](/api). If you have a suggestion, let me know on the [mailing list](https://groups.google.com/forum/#!forum/lettersrb). There is plenty more to do with this library -- for example, arbitrary object diffs, user-defined methods, renameable methods, and defaults configuration. This core is just the beginning.
