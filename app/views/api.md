@@ -182,11 +182,11 @@ While not used every day, tainting and untainting objects gives us more control 
 
 `m` can taint or untaint its receiver object. Without an argument, `m` will taint its receiver. With a falsy argument, `m` will untaint its receiver.
 
-    [1, 2, 3].m.p { tainted? }
+    [1, 2, 3].m.o { tainted? }
     # => [1, 2, 3]
     # Prints "true"
 
-    [1, 2, 3].m(true).m(false).p { tainted? }
+    [1, 2, 3].m(true).m(false).o { tainted? }
     # => [1, 2, 3]
     # Prints "false"
 
@@ -200,16 +200,18 @@ The `n` method is meant to quickly check if an expression is nil. One of two met
     [1, 2, 3].n
     # => [1, 2, 3]
 
-### P (print to STDOUT) ###
+### O (print to STDOUT) ###
 
-P is the `print` statement. (Well, actually, `puts`.) You know how to use this one.
+*Note: The `o` method was formerly the `p` method. I changed it in case people want to use Letters alongside other debugging methods, like `Kernel#p`*
 
-    [1, 2, 3].p
+O prints to `$STDOUT`. You know how to use this one.
+
+    [1, 2, 3].o
     # => [1, 2, 3]
 
-By default, this will print the object to STDOUT in [Awesome Print](http://www.rubyinside.com/awesome_print-a-new-pretty-printer-for-your-ruby-objects-3208.html) format. To change the format, add a parameter to `p`:
+By default, this will print the object to STDOUT in [Awesome Print](http://www.rubyinside.com/awesome_print-a-new-pretty-printer-for-your-ruby-objects-3208.html) format. To change the format, add a parameter to `o`:
 
-    [1, 2, 3].p(:format => "yaml")
+    [1, 2, 3].o(:format => "yaml")
 
 If a block is passed in, it will be executed "inside" of the object (like the `j` method), and the final result of the block will be printed out instead.
 
@@ -217,9 +219,9 @@ The `j` example looked something like this:
 
     [1, 2, 3].j { puts length unless empty? }.reduce(:+)
 
-With `p`, we could rewrite the expression as ...
+With `o`, we could rewrite the expression as ...
 
-    [1, 2, 3].p { length unless empty? }.reduce(:+)
+    [1, 2, 3].o { length unless empty? }.reduce(:+)
     
 ... for the same effect.
 
@@ -361,9 +363,9 @@ If you do patch an instance, the letter methods will only be available on that i
     Letters.patch! arr
 
     # Does not work
-    arr.p.map {|x| x ** 2 }.p
+    arr.o.map {|x| x ** 2 }.o
 
-The second call to `p` will fail because the derivative array (result of the `map` call) has not been patched. Of course, mutating the original array is one way to solve this problem, albeit error-prone:
+The second call to `o` will fail because the derivative array (result of the `map` call) has not been patched. Of course, mutating the original array is one way to solve this problem, albeit error-prone:
 
     # Works, but patching Array is probably better
-    arr.p.map! {|x| x ** 2 }.p
+    arr.o.map! {|x| x ** 2 }.o
