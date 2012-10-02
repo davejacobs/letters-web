@@ -12,3 +12,9 @@ If you have questions about Letters, you have a couple of options:
 ### Contributing ###
 
 To contribute to Letters, [fork us on Github](http://github.com/davejacobs/letters)
+
+### Other languages ###
+
+Letters is not just for Ruby. Here is a running list of ports to other languages:
+
+- [Letters in Scala](https://github.com/Mononofu/Letters-in-Scala)
