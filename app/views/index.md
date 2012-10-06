@@ -56,14 +56,13 @@ This is significantly easier than breaking apart the pipeline using variable ass
 
 The `o` method takes options, too, so you can add a prefix message to the output or choose another output format -- like [YAML]() or [pretty print]().
 
-### ... and the rest of the world ###
 ### The methods ###
 
 <table>
   <tr>
     <th>Letter</th>
     <th>Command</th>
-    <th>Option(s)</th>
+    <th>Options</th>
     <th>Description</th>
   </tr>
 
@@ -72,7 +71,7 @@ The `o` method takes options, too, so you can add a prefix message to the output
       <a href="http://lettersrb.com/api#a">a</a>
     </td>
     <td>
-      <strong>A</strong>ssert
+      Assert
     </td>
     <td>
       :message, 
@@ -88,7 +87,7 @@ The `o` method takes options, too, so you can add a prefix message to the output
       <a href="http://lettersrb.com/api#b">b</a>
     </td>
     <td>
-      <strong>B</strong>eep
+      Beep
     </td>
     <td>
     </td>
@@ -102,7 +101,7 @@ The `o` method takes options, too, so you can add a prefix message to the output
       <a href="http://lettersrb.com/api#c">c</a>
     </td>
     <td>
-      <strong>C</strong>allstack
+      Callstack
     </td>
     <td>
       :message 
@@ -117,7 +116,7 @@ The `o` method takes options, too, so you can add a prefix message to the output
       <a href="http://lettersrb.com/api#d">d</a>
     </td>
     <td>
-      <strong>D</strong>ebugger
+      Debugger
     </td>
     <td>
       
@@ -129,10 +128,10 @@ The `o` method takes options, too, so you can add a prefix message to the output
 
   <tr>
     <td>
-      <a href="http://lettersrb.com/api#d1d2">d1 d2</a>
+      <a href="http://lettersrb.com/api#d1/d2">d1/d2</a>
     </td>
     <td>
-      <strong>D</strong>iff
+      Diff
     </td>
     <td>
       :message,
@@ -149,7 +148,7 @@ The `o` method takes options, too, so you can add a prefix message to the output
       <a href="http://lettersrb.com/api#e">e</a>
     </td>
     <td>
-      <strong>E</strong>mpty
+      Empty
     </td>
     <td>
       :message
@@ -164,7 +163,7 @@ The `o` method takes options, too, so you can add a prefix message to the output
       <a href="http://lettersrb.com/api#f">f</a>
     </td>
     <td>
-      <strong>F</strong>ile
+      File
     </td>
     <td>
       :format, :name
@@ -179,7 +178,7 @@ The `o` method takes options, too, so you can add a prefix message to the output
       <a href="http://lettersrb.com/api#j">j</a>
     </td>
     <td>
-      <strong>J</strong>ump
+      Jump
     </td>
     <td>
       (&block)
@@ -194,7 +193,7 @@ The `o` method takes options, too, so you can add a prefix message to the output
       <a href="http://lettersrb.com/api#k">k</a>
     </td>
     <td>
-      <strong>K</strong>ill
+      Kill
     </td>
     <td>
       :max
@@ -209,7 +208,7 @@ The `o` method takes options, too, so you can add a prefix message to the output
       <a href="http://lettersrb.com/api#l">l</a>
     </td>
     <td>
-      <strong>L</strong>ogger
+      Logger
     </td>
     <td>
       :format, :level
@@ -224,10 +223,10 @@ The `o` method takes options, too, so you can add a prefix message to the output
       <a href="http://lettersrb.com/api#m">m</a>
     </td>
     <td>
-      <strong>M</strong>ark as tainted
+      Mark as tainted
     </td>
     <td>
-      (<strong>true</strong>|false)
+      (true|false)
     </td>
     <td>
       taints (or untaints) its receiver
@@ -239,7 +238,7 @@ The `o` method takes options, too, so you can add a prefix message to the output
       <a href="http://lettersrb.com/api#n">n</a>
     </td>
     <td>
-      <strong>N</strong>il
+      Nil
     </td>
     <td>
       
@@ -254,7 +253,7 @@ The `o` method takes options, too, so you can add a prefix message to the output
       <a href="http://lettersrb.com/api#o">o</a>
     </td>
     <td>
-      std<strong>O</strong>ut
+      Output
     </td>
     <td>
       :format,
@@ -270,7 +269,7 @@ The `o` method takes options, too, so you can add a prefix message to the output
       <a href="http://lettersrb.com/api#r">r</a>
     </td>
     <td>
-      <strong>R</strong>i
+      Ri
     </td>
     <td>
       (method name as symbol)
@@ -285,7 +284,7 @@ The `o` method takes options, too, so you can add a prefix message to the output
       <a href="http://lettersrb.com/api#s">s</a>
     </td>
     <td>
-      <strong>S</strong>afety
+      Safety
     </td>
     <td>
       (level number)
@@ -300,7 +299,7 @@ The `o` method takes options, too, so you can add a prefix message to the output
       <a href="http://lettersrb.com/api#t">t</a>
     </td>
     <td>
-      <strong>T</strong>imestamp
+      Timestamp
     </td>
     <td>
       :time_format

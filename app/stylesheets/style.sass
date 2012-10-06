@@ -287,6 +287,25 @@ body
   hr
     margin: 30px 50px
 
+  table
+    font-size: 14px
+
+    strong
+      font-family: $font !important
+      font-size: 14px !important
+
+    th
+      border-bottom: solid 1px black
+
+    tr
+      td, th
+        &:first-child
+          border-right: solid 1px black
+          width: 80px
+
+    & *
+      padding: 10px
+      vertical-align: top
 
 .fancybox-media
   img
