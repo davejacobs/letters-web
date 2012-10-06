@@ -57,5 +57,258 @@ This is significantly easier than breaking apart the pipeline using variable ass
 The `o` method takes options, too, so you can add a prefix message to the output or choose another output format -- like [YAML]() or [pretty print]().
 
 ### ... and the rest of the world ###
+### The methods ###
 
-There are plenty of other alphabetical methods to [explore on the API page](/api). If you have a suggestion, let me know on the [mailing list](https://groups.google.com/forum/#!forum/lettersrb). There is plenty more to do with this library -- for example, arbitrary object diffs, user-defined methods, renameable methods, and defaults configuration. This core is just the beginning.
+<table>
+  <tr>
+    <th>Letter</th>
+    <th>Command</th>
+    <th>Option(s)</th>
+    <th>Description</th>
+  </tr>
+
+  <tr>
+    <td>
+      <a href="http://lettersrb.com/api#a">a</a>
+    </td>
+    <td>
+      <strong>A</strong>ssert
+    </td>
+    <td>
+      :message, 
+      :error_class
+    </td>
+    <td>
+      asserts in the context of its receiver or Letters::AssertionError
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      <a href="http://lettersrb.com/api#b">b</a>
+    </td>
+    <td>
+      <strong>B</strong>eep
+    </td>
+    <td>
+    </td>
+    <td>
+      causes your terminal to beep
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      <a href="http://lettersrb.com/api#c">c</a>
+    </td>
+    <td>
+      <strong>C</strong>allstack
+    </td>
+    <td>
+      :message 
+    </td>
+    <td>
+      prints the current callstack
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      <a href="http://lettersrb.com/api#d">d</a>
+    </td>
+    <td>
+      <strong>D</strong>ebugger
+    </td>
+    <td>
+      
+    </td>
+    <td>
+      passes control to the debugger
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      <a href="http://lettersrb.com/api#d1d2">d1 d2</a>
+    </td>
+    <td>
+      <strong>D</strong>iff
+    </td>
+    <td>
+      :message,
+      :format,
+      :stream
+    </td>
+    <td>
+      prints a diff between first and second receivers
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      <a href="http://lettersrb.com/api#e">e</a>
+    </td>
+    <td>
+      <strong>E</strong>mpty
+    </td>
+    <td>
+      :message
+    </td>
+    <td>
+      raises a Letters::EmptyError if its receiver is empty
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      <a href="http://lettersrb.com/api#f">f</a>
+    </td>
+    <td>
+      <strong>F</strong>ile
+    </td>
+    <td>
+      :format, :name
+    </td>
+    <td>
+      writes its receiver into a file in a given format
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      <a href="http://lettersrb.com/api#j">j</a>
+    </td>
+    <td>
+      <strong>J</strong>ump
+    </td>
+    <td>
+      (&block)
+    </td>
+    <td>
+      executes its block in the context of its receiver
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      <a href="http://lettersrb.com/api#k">k</a>
+    </td>
+    <td>
+      <strong>K</strong>ill
+    </td>
+    <td>
+      :max
+    </td>
+    <td>
+      raises Letters::KillError after a maximum number of calls
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      <a href="http://lettersrb.com/api#l">l</a>
+    </td>
+    <td>
+      <strong>L</strong>ogger
+    </td>
+    <td>
+      :format, :level
+    </td>
+    <td>
+      logs its receivers on the available logger instance
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      <a href="http://lettersrb.com/api#m">m</a>
+    </td>
+    <td>
+      <strong>M</strong>ark as tainted
+    </td>
+    <td>
+      (<strong>true</strong>|false)
+    </td>
+    <td>
+      taints (or untaints) its receiver
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      <a href="http://lettersrb.com/api#n">n</a>
+    </td>
+    <td>
+      <strong>N</strong>il
+    </td>
+    <td>
+      
+    </td>
+    <td>
+      raises a Letters::NilError if its receiver is nil
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      <a href="http://lettersrb.com/api#o">o</a>
+    </td>
+    <td>
+      std<strong>O</strong>ut
+    </td>
+    <td>
+      :format,
+      :stream
+    </td>
+    <td>
+      prints its receiver to standard output
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      <a href="http://lettersrb.com/api#r">r</a>
+    </td>
+    <td>
+      <strong>R</strong>i
+    </td>
+    <td>
+      (method name as symbol)
+    </td>
+    <td>
+      prints RI documentation of its receiver class
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      <a href="http://lettersrb.com/api#s">s</a>
+    </td>
+    <td>
+      <strong>S</strong>afety
+    </td>
+    <td>
+      (level number)
+    </td>
+    <td>
+      bumps the safety level (by one or as specified)
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      <a href="http://lettersrb.com/api#t">t</a>
+    </td>
+    <td>
+      <strong>T</strong>imestamp
+    </td>
+    <td>
+      :time_format
+    </td>
+    <td>
+      prints out the current timestamp
+    </td>
+  </tr>
+</table>
+
+If you have a suggestion, let me know on the [mailing list](https://groups.google.com/forum/#!forum/lettersrb) or submit a pull request on Github. There is plenty more to do with this library -- for example, arbitrary object diffs, user-defined methods, renameable methods, and defaults configuration. This core is just the beginning.
