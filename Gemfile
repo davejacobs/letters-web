@@ -2,6 +2,7 @@ source :rubygems
 
 gem "boson"
 gem "capistrano"
+gem "capistrano_colors"
 
 gem "sinatra"
 gem "unicorn"
@@ -13,7 +14,5 @@ gem "compass"
 gem "sass"
 gem "haml"
 gem "rdiscount"
-
-gem "rake"
 
 gem "fancy-buttons"
