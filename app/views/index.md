@@ -318,4 +318,6 @@ For maximum productivity, you can tune and tweak each Letters method to fit your
       f :format => "pp", :name => "my-special-file"
     end
 
+### Feedback ###
+
 If you have a suggestion, let me know on the [mailing list](https://groups.google.com/forum/#!forum/lettersrb) or submit a [pull request on Github](http://github.com/davejacobs/letters). There is plenty more to do with this library -- for example, arbitrary object diffs, user-defined methods, renameable methods, and defaults configuration. This core is just the beginning.
