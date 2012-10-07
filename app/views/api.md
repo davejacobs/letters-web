@@ -128,7 +128,7 @@ For hashes, each value in the diff is also a hash (and there is an `updated` key
 
 ### E (empty check) ###
 
-The `e` method is meant to quickly check if an expression is empty. One of two methods that does not always return its receiver, `e` will raise a `Letters::EmptyError` if its receiver is empty. (The other such method is `n`, used for nil checking.) Of course, if it is not empty, the receiver is passed through.
+The `e` method is meant to quickly check if an expression is empty. One of three methods that does not always return its receiver, `e` will raise a `Letters::EmptyError` if its receiver is empty. (The other methods are `k` and `n`.) Of course, if it is not empty, the receiver is passed through.
 
     [].e
     # => raises Letters::EmptyError
@@ -166,6 +166,25 @@ The `j` method gives you a block in the context of the object it's called on. Yo
     # => 6
 
 This expression will print 3 and return 6.
+
+### K (kill) ###
+
+One of three methods that does not always return its receiver, `k` raises a `Letters::KillError` when called too many times. The `k` command can be great for debugging recursion or to check out infinite loops. (The other methods are `e` and `n`.) It can also be used to stop running your code at any point to check the state of the world outside your code (for example in a database).
+
+    hash = {}
+    def recurse(hash, count=0)
+      print count
+      recurse(hash.k(:on => 3), count + 1)
+    end
+    # Prints 0123
+    # => raises Letters::KillError
+    
+    [1, 2, 3].k(:on => 1)
+    # => [1, 2, 3]
+
+#### Options ####
+
+    :max => 0
 
 ### L (logger) ###
 
