@@ -2,14 +2,6 @@
 
 For many of us, troubleshooting begins and ends with the `print` statement. Others recruit the debugger, too. (Maybe you use `print` statements to look at changes over time but the debugger to focus on a small bit of code.) These tools are good, but they are the lowest level of how we can debug in Ruby. Letters leverages `print`, the debugger, control transfer, computer beeps, and other side-effects for more well-rounded visibility into code and state.
 
-To see all the methods that Letters has to offer, [check out the API](/api). (There are about 20 methods so far, for your browsing pleasure.)
-
-If you want a thorough introduction, check out the screencast:
-
-<a class="fancybox-media" rel="media-gallery" href="https://vimeo.com/50347457">
-  <img src="/images/still.png" />
-</a>
-
 ### Installation ###
 
 If you're using RubyGems, install Letters with:
@@ -318,6 +310,6 @@ For maximum productivity, you can tune and tweak each Letters method to fit your
       f :format => "pp", :name => "my-special-file"
     end
 
-### Feedback ###
+### Next steps ###
 
-If you have a suggestion, let me know on the [mailing list](https://groups.google.com/forum/#!forum/lettersrb) or submit a [pull request on Github](http://github.com/davejacobs/letters). There is plenty more to do with this library -- for example, arbitrary object diffs, user-defined methods, renameable methods, and defaults configuration. This core is just the beginning.
+There is plenty more to do with this library -- for example, arbitrary object diffs, user-defined methods, renameable methods, and defaults configuration. This core is just the beginning. For suggestions, feedback and questions, check out [the resources page](http://lettersrb.com/resources).
