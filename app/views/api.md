@@ -184,7 +184,7 @@ One of three methods that does not always return its receiver, `k` raises a `Let
 
 #### Options ####
 
-    :max => 0
+    :on => 0
 
 ### L (logger) ###
 
