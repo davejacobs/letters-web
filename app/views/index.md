@@ -310,4 +310,14 @@ The `o` method takes options, too, so you can add a prefix message to the output
   </tr>
 </table>
 
-If you have a suggestion, let me know on the [mailing list](https://groups.google.com/forum/#!forum/lettersrb) or submit a pull request on Github. There is plenty more to do with this library -- for example, arbitrary object diffs, user-defined methods, renameable methods, and defaults configuration. This core is just the beginning.
+### Configuration ###
+
+Lastly, you can tune and tweak each Letters method to default to your own tastes. Want to name put files somewhere else? No problem. Don't like YAML? Default `f` to use Pretty Print instead! The world of defaults is your oyster.
+
+```ruby
+Letters.config do
+  f :format => "pp", :name => "my-special-file"
+end
+```
+
+If you have a suggestion, let me know on the [mailing list](https://groups.google.com/forum/#!forum/lettersrb) or submit a [pull request on Github](http://github.com/davejacobs/letters). There is plenty more to do with this library -- for example, arbitrary object diffs, user-defined methods, renameable methods, and defaults configuration. This core is just the beginning.
