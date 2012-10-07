@@ -312,7 +312,7 @@ The `o` method takes options, too, so you can add a prefix message to the output
 
 ### Configuration ###
 
-Lastly, you can tune and tweak each Letters method to default to your own tastes. Want to name put files somewhere else? No problem. Don't like YAML? Default `f` to use Pretty Print instead! The world of defaults is your oyster.
+For maximum productivity, you can tune and tweak each Letters method to fit your own tastes. Want to name put files somewhere else? No problem. Don't like YAML? Default `f` to use Pretty Print instead! The world of defaults is your oyster.
 
     Letters.config do
       f :format => "pp", :name => "my-special-file"
