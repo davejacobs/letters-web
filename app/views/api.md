@@ -7,8 +7,12 @@ Letters shouldn't stay in your code base, so it takes the liberty of patching `O
 
     require "letters"
 
-For Rails apps, there may be conflicts with the `t` method in `ActionPack`. To handle that conflict, do not require all of Letters. Instead:
+For Rails apps, there may be conflicts with the `t` method in `ActionPack`. To handle that conflict, do not require all of Letters. Instead, do two things:
 
+    # In your Gemfile
+    gem "letters", :require => false
+
+    # In application.rb after Bundler.require
     require "letters/patch/rails"
 
 If you don't want to patch everything, you can patch classes and objects a la carte:
