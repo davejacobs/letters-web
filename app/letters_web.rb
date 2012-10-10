@@ -25,7 +25,7 @@ class LettersWeb < Sinatra::Application
     @description = "Letters brings Ruby debugging into the 21st century. It leverages print, the debugger, control transfer, even computer beeps to let you see into your code's state."
 
     response["Cache-Control"] = "max-age=300, public"
-    markdown :index, :layout => :layout, :layout_engine => :haml
+    markdown :index, :layout => :layout, :layout_engine => :haml, :smart => true
   end
 
   get "/api" do
@@ -33,7 +33,7 @@ class LettersWeb < Sinatra::Application
     @description = "Letters lets you debug using these methods -- starting with 'A' and ending with 'Z'."
 
     response["Cache-Control"] = "max-age=300, public"
-    markdown :api, :layout => :layout, :layout_engine => :haml
+    markdown :api, :layout => :layout, :layout_engine => :haml, :smart => true
   end
 
   get "/resources" do
@@ -41,6 +41,6 @@ class LettersWeb < Sinatra::Application
     @description = "Look no further for help with Letters"
 
     response["Cache-Control"] = "max-age=300, public"
-    markdown :resources, :layout => :layout, :layout_engine => :haml
+    markdown :resources, :layout => :layout, :layout_engine => :haml, :smart => true
   end
 end
