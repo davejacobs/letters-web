@@ -175,11 +175,12 @@ This expression will print 3 and return 6.
 
 One of three methods that does not always return its receiver, `k` raises a `Letters::KillError` when called too many times. The `k` command can be great for debugging recursion or to check out infinite loops. (The other methods are `e` and `n`.) It can also be used to stop running your code at any point to check the state of the world outside your code (for example in a database).
 
-    hash = {}
     def recurse(hash, count=0)
       print count
       recurse(hash.k(:on => 3), count + 1)
     end
+    
+    recurse Hash.new
     # Prints 0123
     # => raises Letters::KillError
     
