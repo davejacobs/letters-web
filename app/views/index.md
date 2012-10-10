@@ -312,4 +312,4 @@ For maximum productivity, you can tune and tweak each Letters method to fit your
 
 ### Next steps ###
 
-There is plenty more to do with this library -- for example, arbitrary object diffs, user-defined methods, renameable methods, and defaults configuration. This core is just the beginning. For suggestions, feedback and questions, check out [the resources page](http://lettersrb.com/resources).
+There is plenty more to do with this library -- for example, arbitrary object diffs, user-defined methods and methods renaming. This core is just the beginning. For suggestions, feedback and questions, check out [the resources page](http://lettersrb.com/resources).
