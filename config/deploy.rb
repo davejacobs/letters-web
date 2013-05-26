@@ -1,10 +1,8 @@
 # A Capistrano deployment file for lettersrb.com
-# by David Jacobs, (c) 2012
-
-$LOAD_PATH << "#{ENV['rvm_path']}/lib"
+# by David Jacobs, (c) 2013
 
 require 'bundler/capistrano'
-require 'rvm/capistrano'
+require 'capistrano-rbenv'
 
 # Helpers
 def run_in_current(command, env='production')
@@ -16,8 +14,7 @@ def run_in_shared(command, env='production')
 end
 
 def run_in_path(command, path, env='production')
-  set_env = "RACK_ENV=#{env}"
-  run "cd #{path} && #{set_env} #{command}"
+  run "cd #{path} && RACK_ENV=#{env} #{command}"
 end
 
 def ssh_repo(name, user=user, domain=domain)
@@ -30,8 +27,7 @@ set :domain,          'wit.io'
 set :application,     'letters-web'
 
 # Ruby version management
-set :rvm_type,        :user
-set :rvm_ruby_string, '1.9.3@letters-web'
+set :rbenv_ruby_version, '1.9.3-p392'
 
 role :web,            domain
 role :app,            domain
@@ -101,12 +97,12 @@ namespace :unicorn do
   set :unicorn_pid, "#{shared_path}/pids/unicorn.pid"
 
   desc "start unicorn master"
-  task :start do 
+  task :start do
     config = 'config/unicorn.rb'
     run_in_current "unicorn -c #{config} -E production -D"
   end
 
-  task :stop do 
+  task :stop do
     run_in_current "[ -f #{unicorn_pid} ] && kill -9 $(cat #{unicorn_pid})"
   end
 
