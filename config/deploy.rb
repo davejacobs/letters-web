@@ -18,23 +18,23 @@ def run_in_path(command, path, env='production')
 end
 
 def ssh_repo(name, user=user, domain=domain)
-  "ssh://#{user}@#{domain}/home/#{user}/git/#{name}.git"
+  "/home/#{user}/git/#{name}.git"
 end
 
 # Universal values
-set :user,            'david'
-set :domain,          'wit.io'
-set :application,     'letters-web'
+set :user,             'david'
+set :domain,           'wit.io'
+set :application,      'letters-web'
 
 # Ruby version management
 set :rbenv_ruby_version, '1.9.3-p392'
 
-role :web,            domain
-role :app,            domain
-role :db,             domain, :primary => true
+role :web,             domain
+role :app,             domain
+role :db,              domain, :primary => true
 
-set :deploy_to,       "/home/#{user}/www/lettersrb.com" # FIXME
-set :deploy_via,      :remote_cache
+set :deploy_to,        "/home/#{user}/www/lettersrb.com" # FIXME
+set :deploy_via,       :remote_cache
 
 # Set the Path
 # Add bundler_stubs to PATH so we don't have to prefix
@@ -45,16 +45,17 @@ ssh_options[:forward_agent] = true
 
 # Bundler
 # Create symlinks to Bundler-installed binaries in bundler_stubs
-set :bundle_flags,    '--deployment --quiet --binstubs=./bundler_stubs'
+set :bundle_flags,     '--deployment --quiet --binstubs=./bundler_stubs'
 
 # Version control - General
-set :use_sudo,        false
-set :scm_verbose,     false
+set :use_sudo,         false
+set :scm_verbose,      false
 
 # Version control - Remote Rails application repo
-set :scm,             :git
-set :repository,      ssh_repo(application)
-set :branch,          'master'
+set :scm,              :git
+set :repository,       ssh_repo(application)
+set :rbenv_repository, ssh_repo(application)
+set :branch,           'master'
 
 namespace :servers do
   set :server_files, ['nginx/sites-enabled/letters-web.conf']
@@ -152,18 +153,18 @@ end
 
 # Dependencies
 # Bootstrap correctly
-before 'deploy:cold',        'deploy:setup'
+before 'deploy:cold',         'deploy:setup'
 
 # Only keep latest releases
-after 'deploy',              'deploy:cleanup'
-after 'deploy',              'css:compile'
+after 'deploy',               'deploy:cleanup'
+after 'deploy',               'css:compile'
 
 # Link old server config if we rollback
-after 'rollback:default',    'servers:link:config'
+after 'rollback:default',     'servers:link:config'
 
 # Link current maintenance page
-before 'deploy:maintenance', 'servers:link:maintenance'
+before 'deploy:maintenance',  'servers:link:maintenance'
 
 # Link new server config if updated
-before 'deploy:config',      'deploy'
-after 'servers:link:config', 'nginx:reload'
+before 'deploy:config',       'deploy'
+after 'servers:link:config',  'nginx:reload'
