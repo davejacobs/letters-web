@@ -18,7 +18,7 @@ With Letters installed, you have a suite of methods available wherever you want 
 Let's start with the `o` method as an example. It is one of the most familiar methods. Calling it prints the receiver to STDOUT and returns the receiver:
 
     #!ruby
-    { foo: "bar" }.o 
+    { foo: "bar" }.o
     # => { foo: "bar" }
     # prints { foo: "bar" }
 
@@ -31,7 +31,7 @@ That's simple enough, but not really useful. Things get interesting when you're 
       values_at(5, 10).
       slice(0..2).
       join(", ")
-    
+
 If I want to know the state of your code after lines 3 and 5, all I have to do is add `.o` to each one:
 
     #!ruby
@@ -50,6 +50,13 @@ The `o` method takes options, too, so you can add a prefix message to the output
 
 ### The methods ###
 
+Here are the methods, listed with any options that can be passed in to modify their behavior.  Some options are available to all methods and are not listed in the table below:
+
+- `:message (string)`: Print out the specified message as the method is being called.
+- `:line_no (boolean)`: Print out the line number where a method is called as it is being called
+
+You can easily set these for an entire project using global configuration if you wish (see below).
+
 <table>
   <tr>
     <th>Letter</th>
@@ -59,246 +66,115 @@ The `o` method takes options, too, so you can add a prefix message to the output
   </tr>
 
   <tr>
-    <td>
-      <a href="http://lettersrb.com/api#a">a</a>
-    </td>
-    <td>
-      Assert
-    </td>
-    <td>
-      :message, 
-      :error_class
-    </td>
-    <td>
-      asserts in the context of its receiver or Letters::AssertionError
-    </td>
+    <td><a href="http://lettersrb.com/api#a">a</a></td>
+    <td>Assert</td>
+    <td><code>:error_class</code></td>
+    <td>asserts in the context of its receiver or <code>Letters::AssertionError</code></td>
   </tr>
 
   <tr>
-    <td>
-      <a href="http://lettersrb.com/api#b">b</a>
-    </td>
-    <td>
-      Beep
-    </td>
-    <td>
-    </td>
-    <td>
-      causes your terminal to beep
-    </td>
+    <td><a href="http://lettersrb.com/api#b">b</a></td>
+    <td>Beep</td>
+    <td></td>
+    <td>causes your terminal to beep</td>
   </tr>
 
   <tr>
-    <td>
-      <a href="http://lettersrb.com/api#c">c</a>
-    </td>
-    <td>
-      Callstack
-    </td>
-    <td>
-      :message 
-    </td>
-    <td>
-      prints the current callstack
-    </td>
+    <td><a href="http://lettersrb.com/api#c">c</a></td>
+    <td>Callstack</td>
+    <td></td>
+    <td>prints the current callstack</td>
   </tr>
 
   <tr>
-    <td>
-      <a href="http://lettersrb.com/api#d">d</a>
-    </td>
-    <td>
-      Debugger
-    </td>
-    <td>
-      
-    </td>
-    <td>
-      passes control to the debugger
-    </td>
+    <td><a href="http://lettersrb.com/api#d">d</a></td>
+    <td>Debugger</td>
+    <td></td>
+    <td>passes control to the debugger</td>
   </tr>
 
   <tr>
-    <td>
-      <a href="http://lettersrb.com/api#d1/d2">d1/d2</a>
-    </td>
-    <td>
-      Diff
-    </td>
-    <td>
-      :message,
-      :format,
-      :stream
-    </td>
-    <td>
-      prints a diff between first and second receivers
-    </td>
+    <td><a href="http://lettersrb.com/api#d1/d2">d1/d2</a></td>
+    <td>Diff</td>
+    <td><code>:format</code>,<code>:stream</code></td>
+    <td>prints a diff between first and second receivers</td>
   </tr>
 
   <tr>
-    <td>
-      <a href="http://lettersrb.com/api#e">e</a>
-    </td>
-    <td>
-      Empty
-    </td>
-    <td>
-      :message
-    </td>
-    <td>
-      raises a Letters::EmptyError if its receiver is empty
-    </td>
+    <td><a href="http://lettersrb.com/api#e">e</a></td>
+    <td>Empty</td>
+    <td></td>
+    <td>raises a <code>Letters::EmptyError</code> if its receiver is empty</td>
   </tr>
 
   <tr>
-    <td>
-      <a href="http://lettersrb.com/api#f">f</a>
-    </td>
-    <td>
-      File
-    </td>
-    <td>
-      :format, :name
-    </td>
-    <td>
-      writes its receiver into a file in a given format
-    </td>
+    <td><a href="http://lettersrb.com/api#f">f</a></td>
+    <td>File</td>
+    <td><code>:format</code>, <code>:name</code></td>
+    <td>writes its receiver into a file in a given format</td>
   </tr>
 
   <tr>
-    <td>
-      <a href="http://lettersrb.com/api#j">j</a>
-    </td>
-    <td>
-      Jump
-    </td>
-    <td>
-      (&block)
-    </td>
-    <td>
-      executes its block in the context of its receiver
-    </td>
+    <td><a href="http://lettersrb.com/api#j">j</a></td>
+    <td>Jump</td>
+    <td>(<code>&block</code>)</td>
+    <td>executes its block in the context of its receiver</td>
   </tr>
 
   <tr>
-    <td>
-      <a href="http://lettersrb.com/api#k">k</a>
-    </td>
-    <td>
-      Kill
-    </td>
-    <td>
-      :on
-    </td>
-    <td>
-      raises Letters::KillError at a specified number of calls
-    </td>
+    <td><a href="http://lettersrb.com/api#k">k</a></td>
+    <td>Kill</td>
+    <td><code>:on</code></td>
+    <td>raises <code>Letters::KillError</code> at a specified number of calls</td>
   </tr>
 
   <tr>
-    <td>
-      <a href="http://lettersrb.com/api#l">l</a>
-    </td>
-    <td>
-      Logger
-    </td>
-    <td>
-      :format, :level
-    </td>
-    <td>
-      logs its receivers on the available logger instance
-    </td>
+    <td><a href="http://lettersrb.com/api#l">l</a></td>
+    <td>Logger</td>
+    <td><code>:format</code>, <code>:level</code></td>
+    <td>logs its receivers on the available logger instance</td>
   </tr>
 
   <tr>
-    <td>
-      <a href="http://lettersrb.com/api#m">m</a>
-    </td>
-    <td>
-      Mark as tainted
-    </td>
-    <td>
-      (true|false)
-    </td>
-    <td>
-      taints (or untaints) its receiver
-    </td>
+    <td><a href="http://lettersrb.com/api#m">m</a></td>
+    <td>Mark as tainted</td>
+    <td>(<code>true</code>|<code>false</code>)</td>
+    <td>taints (or untaints) its receiver</td>
   </tr>
 
   <tr>
-    <td>
-      <a href="http://lettersrb.com/api#n">n</a>
-    </td>
-    <td>
-      Nil
-    </td>
-    <td>
-      
-    </td>
-    <td>
-      raises a Letters::NilError if its receiver is nil
-    </td>
+    <td><a href="http://lettersrb.com/api#n">n</a></td>
+    <td>Nil</td>
+    <td></td>
+    <td>raises a <code>Letters::NilError</code> if its receiver is nil</td>
   </tr>
 
   <tr>
-    <td>
-      <a href="http://lettersrb.com/api#o">o</a>
-    </td>
-    <td>
-      Output
-    </td>
-    <td>
-      :format,
-      :stream
-    </td>
-    <td>
-      prints its receiver to standard output
-    </td>
+    <td><a href="http://lettersrb.com/api#o">o</a></td>
+    <td>Output</td>
+    <td><code>:format</code>, <code>:stream</code></td>
+    <td>prints its receiver to standard output</td>
   </tr>
 
   <tr>
-    <td>
-      <a href="http://lettersrb.com/api#r">r</a>
-    </td>
-    <td>
-      Ri
-    </td>
-    <td>
-      (method name as symbol)
-    </td>
-    <td>
-      prints RI documentation of its receiver class
-    </td>
+    <td><a href="http://lettersrb.com/api#r">r</a></td>
+    <td>Ri</td>
+    <td>(method name as symbol)</td>
+    <td>prints RI documentation of its receiver class</td>
   </tr>
 
   <tr>
-    <td>
-      <a href="http://lettersrb.com/api#s">s</a>
-    </td>
-    <td>
-      Safety
-    </td>
-    <td>
-      (level number)
-    </td>
-    <td>
-      bumps the safety level (by one or as specified)
-    </td>
+    <td><a href="http://lettersrb.com/api#s">s</a></td>
+    <td>Safety</td>
+    <td>(level number)</td>
+    <td>bumps the safety level (by one or as specified)</td>
   </tr>
 
   <tr>
-    <td>
-      <a href="http://lettersrb.com/api#t">t</a>
-    </td>
-    <td>
-      Timestamp
-    </td>
-    <td>
-      :time_format
-    </td>
-    <td>
-      prints out the current timestamp
-    </td>
+    <td><a href="http://lettersrb.com/api#t">t</a></td>
+    <td>Timestamp</td>
+    <td><code>:time_format</code></td>
+    <td>prints out the current timestamp</td>
   </tr>
 </table>
 
@@ -308,6 +184,12 @@ For maximum productivity, you can tune and tweak each Letters method to fit your
 
     Letters.config do
       f :format => "pp", :name => "my-special-file"
+    end
+
+You can also change options globally, for methods where the global option is appropriate. For example, if you want every Letters method to print out its line number when called, you can do this for all methods at once:
+
+    Letters.config do
+      all :line_no => true
     end
 
 ### Next steps ###
