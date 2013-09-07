@@ -17,8 +17,13 @@ def run_in_path(command, path, env='production')
   run "cd #{path} && RACK_ENV=#{env} #{command}"
 end
 
-def ssh_repo(name, user=user, domain=domain)
+def local_repo(name, user=user, domain=domain)
+  # "file:///home/#{user}/git/#{name}.git"
   "/home/#{user}/git/#{name}.git"
+end
+
+def ssh_repo(name, user=user, domain=domain)
+  "ssh://#{user}@#{domain}/home/#{user}/git/#{name}.git"
 end
 
 # Universal values
@@ -27,14 +32,14 @@ set :domain,           'wit.io'
 set :application,      'letters-web'
 
 # Ruby version management
-set :rbenv_ruby_version, '1.9.3-p392'
+set :rbenv_ruby_version, '1.9.3-p429'
 
 role :web,             domain
 role :app,             domain
 role :db,              domain, :primary => true
 
 set :deploy_to,        "/home/#{user}/www/lettersrb.com" # FIXME
-set :deploy_via,       :remote_cache
+# set :deploy_via,       :remote_cache
 
 # Set the Path
 # Add bundler_stubs to PATH so we don't have to prefix
@@ -53,8 +58,8 @@ set :scm_verbose,      false
 
 # Version control - Remote Rails application repo
 set :scm,              :git
-set :repository,       ssh_repo(application)
-set :rbenv_repository, ssh_repo(application)
+set :repository,       local_repo(application)
+set :local_repository, "helos:#{local_repo(application)}"
 set :branch,           'master'
 
 namespace :servers do
