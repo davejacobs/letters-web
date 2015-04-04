@@ -2,7 +2,7 @@
 # by David Jacobs, (c) 2013
 
 require 'bundler/capistrano'
-require 'capistrano-rbenv'
+# require 'capistrano-rbenv'
 
 # Helpers
 def run_in_current(command, env='production')

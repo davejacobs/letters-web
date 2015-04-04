@@ -10,8 +10,8 @@ gem "sass"
 gem "haml"
 gem "rdiscount"
 
-gem "capistrano"
-gem "capistrano-rbenv"
+gem "capistrano", "~> 2.15.5" 
+gem "capistrano-rbenv", "~> 1.0.5"
 gem "capistrano_colors"
 
 gem "fancy-buttons"
