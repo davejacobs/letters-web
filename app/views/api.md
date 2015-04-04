@@ -5,10 +5,12 @@ If you think about it, Letters is a library dedicated to side effects. It wants 
 
 Letters shouldn't stay in your code base, so it takes the liberty of patching `Object`. This happens when you enter:
 
+    #!ruby
     require "letters"
 
 For Rails apps, there may be conflicts with the `t` method in `ActionPack`. To handle that conflict, do not require all of Letters. Instead, do two things:
 
+    #!ruby
     # In your Gemfile
     gem "letters", :require => false
 
@@ -17,6 +19,7 @@ For Rails apps, there may be conflicts with the `t` method in `ActionPack`. To h
 
 If you don't want to patch everything, you can patch classes and objects a la carte:
 
+    #!ruby
     require "letters/patch"
     Letters.patch! Hash
     obj = Object.new
@@ -24,10 +27,11 @@ If you don't want to patch everything, you can patch classes and objects a la ca
 
 ### A (assert) ###
 
-The `a` method stands apart from most other Letters methods. Why? Because it does not always return its receiver. `a` is used to craft assertions, and if an assertion fails, it raises an error. Two special cases of the `a` method are `e` and `n`, which assert that their receivers are not empty or nil (respectively). 
+The `a` method stands apart from most other Letters methods. Why? Because it does not always return its receiver. `a` is used to craft assertions, and if an assertion fails, it raises an error. Two special cases of the `a` method are `e` and `n`, which assert that their receivers are not empty or nil (respectively).
 
 The `a` method jumps into the context of its receiver, so all assertions can be made without explicitly referring to the object:
 
+    #!ruby
     [1, 2, 3].a { count == 3 }
     # => [1, 2, 3]
 
@@ -35,6 +39,7 @@ Notice that you didn't have to pass a block argument in.
 
 Assertions will fail if the result of the block is not truthy (as defined by Ruby). That is, false or nil blocks will raise a `Letters::AssertionError`.
 
+    #!ruby
     [1, 2, 3].a { count > 3 }
     # Raises Letters::AssertionError
 
@@ -45,6 +50,7 @@ The `a` method can take a message that will be printed every time the assertion 
 
 #### Options ####
 
+    #!ruby
     :message => nil
     :error_class => Letters::AssertionError
 
@@ -52,6 +58,7 @@ The `a` method can take a message that will be printed every time the assertion 
 
 The `b` method causes your terminal to, well, beep. This one is mainly for fun but is also useful for coarse-grained time analysis. For example, you might leverage `b` to detect n + 1 SQL queries or other data manipulation that takes more than a few milliseconds.
 
+    #!ruby
     (1..100_000_000).b.map(&:succ).b.reduce(:+).b
     # => 5000000150000000
 
@@ -63,6 +70,7 @@ For more fine-grained time analysis, see the timestamp method, `t`.
 
 The `c` method prints the current callstack.
 
+    #!ruby
     def inner
       # Print the callstack
       rand.c * 10
@@ -79,7 +87,7 @@ In IRB, this prints:
     #!plain
     <main>:1:in `inner_method'
     <main>:5:in `outer_method'
-    (irb):3:in `irb_binding' 
+    (irb):3:in `irb_binding'
       <rubydir>/irb/workspace.rb:80: in `eval'
 
 Again, this does not interrupt execution of your code -- it just lets you know where you are.
@@ -92,8 +100,9 @@ Again, this does not interrupt execution of your code -- it just lets you know w
 
 We all know and love the debugger, but normal debugger calls are imperative. It can be a pain to break apart code to fit in a debugger. Instead, consider invoking `d` at the end of any expression:
 
+    #!ruby
     Network.fetch_data.d.all? do |str|
-      str.length > 25 
+      str.length > 25
     end
 
 The `d` method will be even more powerful when combined with other constructs like transmitters and receivers *(not yet implemented)*.
@@ -102,17 +111,20 @@ The `d` method will be even more powerful when combined with other constructs li
 
 The `d1/d2` method pair brings [`diff`](http://man.cx/diff) to your Ruby environment. Instead of printing a line-by-line diff, though, this diff prints out a hash. How does this method pair work? All you need to do is mark the first object for comparison with `d1` and then call `d2` on the second object. By default, `d1` and `d2` work on arrays, hashes, and any object that defines a sane minus method (`-`) for comparing itself with like objects.
 
+    #!ruby
     [1, 2, 3].d1.map {|x| x ** 2 }.d2
 
 Calling the expression will print the following in the [Awesome Print](http://www.rubyinside.com/awesome_print-a-new-pretty-printer-for-your-ruby-objects-3208.html) format:
 
-    { 
+    #!ruby
+    {
       removed: [2, 3],
       added: [4, 9]
     }
 
 For hashes, each value in the diff is also a hash (and there is an `updated` key):
 
+    #!ruby
     { a: "foo", b: "bar", c: "baz" }.d1.select do |k, v|
       k =~ /[ab]/
     end.merge(:a => "new-foo", d: "bat").d2
@@ -126,6 +138,7 @@ For hashes, each value in the diff is also a hash (and there is an `updated` key
 
 #### Options for d2 ####
 
+    #!ruby
     :message => nil
     :format => "ap"
     :stream => $stdout
@@ -134,6 +147,7 @@ For hashes, each value in the diff is also a hash (and there is an `updated` key
 
 The `e` method is meant to quickly check if an expression is empty. One of three methods that does not always return its receiver, `e` will raise a `Letters::EmptyError` if its receiver is empty. (The other methods are `k` and `n`.) Of course, if it is not empty, the receiver is passed through.
 
+    #!ruby
     [].e
     # => raises Letters::EmptyError
 
@@ -142,21 +156,25 @@ The `e` method is meant to quickly check if an expression is empty. One of three
 
 #### Options ####
 
+    #!ruby
     :message => nil
 
 ### F (write to file) ###
 
 Sometimes, you want to be able to manipulate the results of a method call in your favorite text editor. Maybe you want to use sophisticated Unix tools to pick apart an unnecessarily gigantic object. You could always stop to break open your code, create a file block, remember the file flag options, and accidentally change downstream code in the process. Or you could tag your object with `f`:
 
+    #!ruby
     JSON.parse(body).f.values_at(:name, :title)
 
 By default, this will write to a file called "log" in your current directory. It will dump the object out in YAML format. To change either of those settings, add parameters to `f`:
 
+    #!ruby
     object.f(:format => "json")
     object.f(:name => "file.txt")
 
 #### Options ####
 
+    #!ruby
     :format => "yaml"
     :name => "log"
 
@@ -166,6 +184,7 @@ See "Formats" below for all available formats.
 
 The `j` method gives you a block in the context of the object it's called on. You can call any of the object's methods (in addition to `puts`, etc., for finer-grained debugging) without naming a receiver. (You could be explicit and use `self`. But what does this look like, Python?) Note that if you mutate the object, it will be mutated on the other side of the method.
 
+    #!ruby
     [1, 2, 3].j { puts length unless empty? }.reduce(:+)
     # => 6
 
@@ -175,37 +194,41 @@ This expression will print 3 and return 6.
 
 One of three methods that does not always return its receiver, `k` raises a `Letters::KillError` when called too many times. The `k` command can be great for debugging recursion or to check out infinite loops. (The other methods are `e` and `n`.) It can also be used to stop running your code at any point to check the state of the world outside your code (for example in a database).
 
+    #!ruby
     def recurse(hash, count=0)
       print count
       recurse(hash.k(:on => 3), count + 1)
     end
-    
+
     recurse Hash.new
     # Prints 0123
     # => raises Letters::KillError
-    
+
     [1, 2, 3].k(:on => 1)
     # => [1, 2, 3]
 
 #### Options ####
 
+    #!ruby
     :on => 0
 
 ### L (logger) ###
 
-The `l` method assumes you have an instance of a Ruby logger returned by the method `logger`. This will be the case in any standard Rails or Sinatra app. You can also set one up using the [standard Ruby logger](http://www.ruby-doc.org/stdlib-1.9.3/libdoc/logger/rdoc/Logger.html) or [Log4r](http://log4r.rubyforge.org/). 
+The `l` method assumes you have an instance of a Ruby logger returned by the method `logger`. This will be the case in any standard Rails or Sinatra app. You can also set one up using the [standard Ruby logger](http://www.ruby-doc.org/stdlib-1.9.3/libdoc/logger/rdoc/Logger.html) or [Log4r](http://log4r.rubyforge.org/).
 
 #### Options ####
 
+    #!ruby
     :format => "yaml"
     :level => "info"
 
 ### M (mark as tainted, untainted) ###
 
-While not used every day, tainting and untainting objects gives us more control over what we allow through our code. In Ruby, tainted objects (mostly) represent user input and derived values. They can be tainted and untainted at will at the lower safety levels. 
+While not used every day, tainting and untainting objects gives us more control over what we allow through our code. In Ruby, tainted objects (mostly) represent user input and derived values. They can be tainted and untainted at will at the lower safety levels.
 
 `m` can taint or untaint its receiver object. Without an argument, `m` will taint its receiver. With a falsy argument, `m` will untaint its receiver.
 
+    #!ruby
     [1, 2, 3].m.o { tainted? }
     # => [1, 2, 3]
     # Prints "true"
@@ -218,6 +241,7 @@ While not used every day, tainting and untainting objects gives us more control 
 
 The `n` method is meant to quickly check if an expression is nil. One of two methods that does not always return its receiver, `n` will raise a `Letters::NilError` if its receiver is nil. (The other such method is `e`, used to check for empty objects.) Of course, if it is not nil, the receiver is passed through.
 
+    #!ruby
     nil.n
     # => raises Letters::NilError
 
@@ -230,27 +254,32 @@ The `n` method is meant to quickly check if an expression is nil. One of two met
 
 O prints to `$STDOUT`. You know how to use this one.
 
+    #!ruby
     [1, 2, 3].o
     # => [1, 2, 3]
 
 By default, this will print the object to STDOUT in [Awesome Print](http://www.rubyinside.com/awesome_print-a-new-pretty-printer-for-your-ruby-objects-3208.html) format. To change the format, add a parameter to `o`:
 
+    #!ruby
     [1, 2, 3].o(:format => "yaml")
 
 If a block is passed in, it will be executed "inside" of the object (like the `j` method), and the final result of the block will be printed out instead.
 
 The `j` example looked something like this:
 
+    #!ruby
     [1, 2, 3].j { puts length unless empty? }.reduce(:+)
 
 With `o`, we could rewrite the expression as ...
 
+    #!ruby
     [1, 2, 3].o { length unless empty? }.reduce(:+)
-    
+
 ... for the same effect.
 
 #### Options ####
 
+    #!ruby
     :format => "ap"
     :stream => $stdout
 
@@ -258,10 +287,11 @@ With `o`, we could rewrite the expression as ...
 
 You've probably forgotten about RI, haven't you? It's that tool that comes with Ruby and is meant to make offline documentation easy.
 
-Because there are plenty of resources on the Internet, namely [RubyDoc](http://ruby-doc.org), people tend to disable RDoc generation. But context-switching from the terminal/keyboard to the browser/mouse can be disruptive. So Letters gives you the power to explore Ruby's documentation from the comfort of your own terminal. 
+Because there are plenty of resources on the Internet, namely [RubyDoc](http://ruby-doc.org), people tend to disable RDoc generation. But context-switching from the terminal/keyboard to the browser/mouse can be disruptive. So Letters gives you the power to explore Ruby's documentation from the comfort of your own terminal.
 
 To check out the documentation for an object's class, simply use the `r` method:
 
+    #!ruby
     [1, 2, 3].r
     # => [1, 2, 3]
 
@@ -292,6 +322,7 @@ When you call this method, you will get the following in STDOUT:
 
 Not interested in learning what an array is? Pass in a method name:
 
+    #!ruby
     [1, 2, 3].r(:grep)
     # => [1, 2, 3]
 
@@ -314,7 +345,7 @@ Now you get more focused information:
     it, and the block's result is stored in the output
     array.
 
-      (1..100).grep 38..44   #=> [38, 39, 40, 
+      (1..100).grep 38..44   #=> [38, 39, 40,
                                   41, 42, 43, 44]
       c = IO.constants
       c.grep(/SEEK/)         #=> [:SEEK_SET,
@@ -323,7 +354,7 @@ Now you get more focused information:
 
       res = c.grep(/SEEK/) {|v| IO.const_get(v) }
       res                    #=> [0, 1, 2]
-    
+
 If you're using RVM and need to generate your RDoc again, type the following in and go grab a coffee:
 
     #!plain
@@ -345,6 +376,7 @@ The `s` method is most interesting when combined with tainted objects.
 
 The `t` method will print out the current timestamp. This can be useful for identifying bottlenecks in code more precisely than with `b` but without the complexity of a profiler.
 
+    #!ruby
     (1..100_000_000).t.map(&:succ).t.reduce(:+).t
     # => 5000000150000000
 
@@ -359,12 +391,13 @@ This call prints something like:
 
 The `:time_format` option allows you to print timestamps in any time format [you've registered with ActiveSupport](http://ofps.oreilly.com/titles/9780596521424/active-support.html#id390940856542).
 
+    #!ruby
     :time_format => "millis"
 
 Formats
 -------
 
-The following formats are supported. They can be specified by passing `format: "format"` to appropriate methods. 
+The following formats are supported. They can be specified by passing `format: "format"` to appropriate methods.
 
 - Ruby Pretty Print (`format: "pp"`)
 - Ruby [Awesome Print](http://www.rubyinside.com/awesome_print-a-new-pretty-printer-for-your-ruby-objects-3208.html) (`format: "ap"`)
@@ -382,6 +415,7 @@ If you don't want to patch them with such small method names, you can explicitly
 
 If you do patch an instance, the letter methods will only be available on that instance and not on any derivative instances. For example, this will not work:
 
+    #!ruby
     require "letters/patch"
     arr = [1, 2, 3]
     Letters.patch! arr
@@ -391,5 +425,6 @@ If you do patch an instance, the letter methods will only be available on that i
 
 The second call to `o` will fail because the derivative array (result of the `map` call) has not been patched. Of course, mutating the original array is one way to solve this problem, albeit error-prone:
 
+    #!ruby
     # Works, but patching Array is probably better
     arr.o.map! {|x| x ** 2 }.o

@@ -182,14 +182,23 @@ You can easily set these for an entire project using global configuration if you
 
 For maximum productivity, you can tune and tweak each Letters method to fit your own tastes. Want to name put files somewhere else? No problem. Don't like YAML? Default `f` to use Pretty Print instead! The world of defaults is your oyster.
 
+    #!ruby
     Letters.config do
       f :format => "pp", :name => "my-special-file"
     end
 
 You can also change options globally, for methods where the global option is appropriate. For example, if you want every Letters method to print out its line number when called, you can do this for all methods at once:
 
+    #!ruby
     Letters.config do
       all :line_no => true
+    end
+
+To disable all Letters, for example if you're worried about them getting into a production environment:
+
+    #!ruby
+    Letters.config do
+      all :disable => true
     end
 
 ### Next steps ###

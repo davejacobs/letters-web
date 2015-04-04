@@ -15,7 +15,9 @@
 
     %link(rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.7.1/build/cssreset/cssreset-min.css")/
     %link(rel="stylesheet" type="text/css" href="stylesheets/sh/themes/shCoreRDark.css")/
-    %link(rel="stylesheet" type="text/css" href="stylesheets/style.css")/
+
+    = css :application
+
     %link(rel="stylesheet" type="text/css" href="stylesheets/fancybox/jquery.fancybox-buttons.css")/
     %link(rel="stylesheet" type="text/css" href="stylesheets/fancybox/jquery.fancybox-thumbs.css")/
     %link(rel="stylesheet" type="text/css" href="stylesheets/fancybox/jquery.fancybox.css")/
@@ -65,5 +67,4 @@
               %a(href="/resources") Resources
 
       .outer-content
-        .content
-          = yield
+        .content= yield

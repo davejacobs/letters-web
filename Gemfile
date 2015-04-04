@@ -1,18 +1,17 @@
 source "https://rubygems.org"
 
-gem "boson"
-gem "capistrano"
-gem "capistrano_colors"
-
 gem "sinatra"
+gem "sinatra-assetpack"
 gem "unicorn"
 gem "rack-cache"
-gem "rack_csrf"
 
-gem "tilt"
-gem "compass"
+gem "tilt", "~> 1.3"
 gem "sass"
 gem "haml"
 gem "rdiscount"
+
+gem "capistrano"
+gem "capistrano-rbenv"
+gem "capistrano_colors"
 
 gem "fancy-buttons"
