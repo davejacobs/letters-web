@@ -156,7 +156,7 @@ before 'deploy:cold',         'deploy:setup'
 
 # Only keep latest releases
 after 'deploy',               'deploy:cleanup'
-after 'deploy',               'css:compile'
+# after 'deploy',               'css:compile'
 
 # Link old server config if we rollback
 after 'rollback:default',     'servers:link:config'
