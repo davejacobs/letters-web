@@ -2,7 +2,7 @@
 # by David Jacobs, (c) 2013
 
 require 'bundler/capistrano'
-# require 'capistrano-rbenv'
+require 'capistrano-rbenv'
 
 # Helpers
 def run_in_current(command, env='production')
@@ -17,13 +17,8 @@ def run_in_path(command, path, env='production')
   run "cd #{path} && RACK_ENV=#{env} #{command}"
 end
 
-def local_repo(name, user=user, domain=domain)
-  # "file:///home/#{user}/git/#{name}.git"
-  "/home/#{user}/git/#{name}.git"
-end
-
-def ssh_repo(name, user=user, domain=domain)
-  "ssh://#{user}@#{domain}/home/#{user}/git/#{name}.git"
+def remote_repo(name, user=user, domain=domain)
+  'git@bitbucket.org:davetypes/letters-www.git'
 end
 
 # Universal values
@@ -32,7 +27,7 @@ set :domain,           'wit.io'
 set :application,      'letters-web'
 
 # Ruby version management
-set :rbenv_ruby_version, '1.9.3-p429'
+set :rbenv_ruby_version, '1.9.3-p551'
 
 role :web,             domain
 role :app,             domain
@@ -58,8 +53,7 @@ set :scm_verbose,      false
 
 # Version control - Remote Rails application repo
 set :scm,              :git
-set :repository,       local_repo(application)
-set :local_repository, "helos:#{local_repo(application)}"
+set :repository,       remote_repo(application)
 set :branch,           'master'
 
 namespace :servers do
@@ -68,7 +62,7 @@ namespace :servers do
     desc 'link server config files in file system'
     task :config do
       source_dir = "#{current_path}/config/"
-      dest_dir = "/etc/"
+      dest_dir = '/etc/'
 
       server_files.each do |file|
         source_file = source_dir + file
@@ -79,7 +73,7 @@ namespace :servers do
 
     task :maintenance do
       source_dir = "#{current_path}/public/maintenance"
-      dest_dir = "maintenance"
+      dest_dir = 'maintenance'
       run_in_shared "ln -s #{source_dir} maintenance"
     end
   end
@@ -94,7 +88,7 @@ end
 
 namespace :css do
   task :compile do
-    run_in_current "compass compile"
+    run_in_current 'compass compile'
   end
 end
 
@@ -102,7 +96,7 @@ end
 namespace :unicorn do
   set :unicorn_pid, "#{shared_path}/pids/unicorn.pid"
 
-  desc "start unicorn master"
+  desc 'start unicorn master'
   task :start do
     config = 'config/unicorn.rb'
     run_in_current "unicorn -c #{config} -E production -D"
