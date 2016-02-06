@@ -1,4 +1,4 @@
-!/bin/bash
+#!/bin/bash
 
 export PATH="/home/david/.rbenv/bin:/home/david/.rbenv/shims":$PATH
 eval "$(rbenv init -)"
