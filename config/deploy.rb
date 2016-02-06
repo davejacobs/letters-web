@@ -37,23 +37,12 @@ namespace :unicorn do
 end
 
 namespace :nginx do
-  task :reload { sudo "nginx -s reload" }
-end
-
-namespace :deploy do
-  task :start { unicorn.start }
-  task :stop { unicorn.stop }
-  task :restart { unicorn.reload }
-  task :config { servers.link.config }
-  task :migrations do; end
-  task :migrate do; end
-end
-
-namespace :servers do
   set :nginx_files, ["#{application}.conf"]
 
-  namespace :link do
-    task :config do
+  task :reload { sudo "nginx -s reload" }
+
+  namespace :config do
+    task :link do
       source_dir = "#{current_path}/config/"
       dest_dir = "/etc/nginx/sites-enabled/"
 
@@ -63,13 +52,22 @@ namespace :servers do
         sudo "ln -nfs #{source_file} #{dest_file}"
       end
     end
-  end
 
-  task :clean do
-    nginx_files.each do |file|
-      sudo "rm /etc/nginx/sites-enabled/#{file}"
+    task :clean do
+      nginx_files.each do |file|
+        sudo "rm /etc/nginx/sites-enabled/#{file}"
+      end
     end
   end
+end
+
+namespace :deploy do
+  task :start { unicorn.start }
+  task :stop { unicorn.stop }
+  task :restart { unicorn.reload }
+  task :config { servers.config.link }
+  task :migrations do; end
+  task :migrate do; end
 end
 
 # Bootstrap correctly
@@ -79,8 +77,8 @@ before "deploy:cold", "deploy:setup"
 after "deploy", "deploy:cleanup"
 
 # Link old server config if we rollback
-after "rollback:default", "servers:link:config"
+after "rollback:default", "servers:config:link"
+after "servers:config:link",  "nginx:reload"
 
 # Link new server config if updated
 before "deploy:config",       "deploy"
-after "servers:link:config",  "nginx:reload"
