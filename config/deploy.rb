@@ -5,7 +5,7 @@ require "bundler/capistrano"
 require "capistrano-rbenv"
 
 set :user,             "david"
-set :domain,           "wit.io"
+set :domain,           "lettersrb.com"
 set :application,      "letters-web"
 
 # Ruby version management
@@ -31,18 +31,18 @@ set :repository,       "git@bitbucket.org:davetypes/letters-www.git"
 set :branch,           "master"
 
 namespace :unicorn do
-  task :start { run "supervisorctl start unicorn" }
-  task :stop { run "supervisorctl stop unicorn" }
-  task :reload { run "supervisorctl restart unicorn" }
+  task(:start) { run "supervisorctl start unicorn" }
+  task(:stop) { run "supervisorctl stop unicorn" }
+  task(:reload) { run "supervisorctl restart unicorn" }
 end
 
 namespace :nginx do
   set :nginx_files, ["#{application}.conf"]
 
-  task :reload { sudo "nginx -s reload" }
+  task(:reload) { sudo "nginx -s reload" }
 
   namespace :config do
-    task :link do
+    task(:link) do
       source_dir = "#{current_path}/config/"
       dest_dir = "/etc/nginx/sites-enabled/"
 
@@ -53,7 +53,7 @@ namespace :nginx do
       end
     end
 
-    task :clean do
+    task(:clean) do
       nginx_files.each do |file|
         sudo "rm /etc/nginx/sites-enabled/#{file}"
       end
@@ -62,12 +62,12 @@ namespace :nginx do
 end
 
 namespace :deploy do
-  task :start { unicorn.start }
-  task :stop { unicorn.stop }
-  task :restart { unicorn.reload }
-  task :config { servers.config.link }
-  task :migrations do; end
-  task :migrate do; end
+  task(:start) { unicorn.start }
+  task(:stop) { unicorn.stop }
+  task(:restart) { unicorn.reload }
+  task(:config) { servers.config.link }
+  task(:migrations) { }
+  task(:migrate) { }
 end
 
 # Bootstrap correctly
@@ -77,8 +77,8 @@ before "deploy:cold", "deploy:setup"
 after "deploy", "deploy:cleanup"
 
 # Link old server config if we rollback
-after "rollback:default", "servers:config:link"
-after "servers:config:link",  "nginx:reload"
+after "rollback:default", "nginx:config:link"
+after "nginx:config:link",  "nginx:reload"
 
 # Link new server config if updated
 before "deploy:config",       "deploy"
