@@ -1,4 +1,4 @@
-worker_processes 2
+worker_processes 1
 
 # Load source into the master before forking workers
 # for super-fast worker spawn times
@@ -7,14 +7,13 @@ preload_app true
 # Restart any workers that haven't responded in 30 seconds
 timeout 5
 
-shared_path = "/home/david/www/lettersrb.com/shared"
+root_dir = "/home/david/www/letters-web/"
+shared_path = "#{root_dir}/shared"
 
 # Listen on a Unix data socket
-listen '/home/david/www/lettersrb.com/current/tmp/unicorn.sock', :backlog => 2048
-
-stdout_path "/home/david/www/lettersrb.com/current/log/unicorn.stdout.log"
-stderr_path "/home/david/www/lettersrb.com/current/log/unicorn.stderr.log"
-
+listen "#{root_dir}/current/tmp/unicorn.sock", :backlog => 2048
+stdout_path "#{shared_path}/log/unicorn.stdout.log"
+stderr_path "#{shared_path}/log/unicorn.stderr.log"
 pid "#{shared_path}/pids/unicorn.pid"
 
 before_fork do |server, worker|

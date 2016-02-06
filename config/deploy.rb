@@ -33,7 +33,7 @@ role :web,             domain
 role :app,             domain
 role :db,              domain, :primary => true
 
-set :deploy_to,        "/home/#{user}/www/lettersrb.com" # FIXME
+set :deploy_to,        "/home/#{user}/www/#{application}"
 # set :deploy_via,       :remote_cache
 
 # Set the Path
@@ -57,12 +57,12 @@ set :repository,       remote_repo(application)
 set :branch,           'master'
 
 namespace :servers do
-  set :server_files, ['nginx/sites-enabled/letters-web.conf']
+  set :server_files, ["#{application}.conf"]
   namespace :link do
     desc 'link server config files in file system'
     task :config do
       source_dir = "#{current_path}/config/"
-      dest_dir = '/etc/'
+      dest_dir = '/etc/nginx/sites-enabled/'
 
       server_files.each do |file|
         source_file = source_dir + file
@@ -86,37 +86,18 @@ namespace :servers do
   end
 end
 
-namespace :css do
-  task :compile do
-    run_in_current 'compass compile'
-  end
-end
-
 # Server - Unicorn
 namespace :unicorn do
-  set :unicorn_pid, "#{shared_path}/pids/unicorn.pid"
-
-  desc 'start unicorn master'
   task :start do
-    config = 'config/unicorn.rb'
-    run_in_current "unicorn -c #{config} -E production -D"
+    run_in_current "supervisorctl start unicorn"
   end
 
   task :stop do
-    run_in_current "[ -f #{unicorn_pid} ] && kill -9 $(cat #{unicorn_pid})"
-  end
-
-  task :graceful_stop do
-    run_in_current "kill -s QUIT $(cat #{unicorn_pid})"
+    run_in_current "supervisorctl stop unicorn"
   end
 
   task :reload do
-    run_in_current "kill -s USR2 $(cat #{unicorn_pid})"
-  end
-
-  task :restart do
-    stop
-    start
+    run_in_current "supervisorctl restart unicorn"
   end
 end
 
@@ -124,7 +105,7 @@ end
 namespace :nginx do
   desc 'reload nginx server'
   task :reload do
-    sudo '/etc/init.d/nginx reload'
+    sudo 'nginx -s reload'
   end
 end
 
@@ -139,7 +120,7 @@ namespace :deploy do
   end
 
   task :restart do
-    unicorn.restart
+    unicorn.reload
   end
 
   task :config do
