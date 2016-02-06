@@ -1,33 +1,15 @@
 # A Capistrano deployment file for lettersrb.com
-# by David Jacobs, (c) 2013
+# by David Jacobs, (c) 2016
 
-require 'bundler/capistrano'
-require 'capistrano-rbenv'
+require "bundler/capistrano"
+require "capistrano-rbenv"
 
-# Helpers
-def run_in_current(command, env='production')
-  run_in_path(command, current_path, env)
-end
-
-def run_in_shared(command, env='production')
-  run_in_path(command, shared_path, env)
-end
-
-def run_in_path(command, path, env='production')
-  run "cd #{path} && RACK_ENV=#{env} #{command}"
-end
-
-def remote_repo(name, user=user, domain=domain)
-  'git@bitbucket.org:davetypes/letters-www.git'
-end
-
-# Universal values
-set :user,             'david'
-set :domain,           'wit.io'
-set :application,      'letters-web'
+set :user,             "david"
+set :domain,           "wit.io"
+set :application,      "letters-web"
 
 # Ruby version management
-set :rbenv_ruby_version, '1.9.3-p551'
+set :rbenv_ruby_version, "1.9.3-p551"
 
 role :web,             domain
 role :app,             domain
@@ -36,115 +18,69 @@ role :db,              domain, :primary => true
 set :deploy_to,        "/home/#{user}/www/#{application}"
 # set :deploy_via,       :remote_cache
 
-# Set the Path
-# Add bundler_stubs to PATH so we don't have to prefix
-# binary calls with the atrocious `bundle exec`
-default_environment['PATH'] = "#{current_path}/bundler_stubs:$PATH"
 default_run_options[:pty] = true
 ssh_options[:forward_agent] = true
 
-# Bundler
 # Create symlinks to Bundler-installed binaries in bundler_stubs
-set :bundle_flags,     '--deployment --quiet --binstubs=./bundler_stubs'
+set :bundle_flags,     "--deployment --quiet --binstubs=./bundler_stubs"
 
 # Version control - General
 set :use_sudo,         false
 set :scm_verbose,      false
+set :repository,       "git@bitbucket.org:davetypes/letters-www.git"
+set :branch,           "master"
 
-# Version control - Remote Rails application repo
-set :scm,              :git
-set :repository,       remote_repo(application)
-set :branch,           'master'
+namespace :unicorn do
+  task :start { run "supervisorctl start unicorn" }
+  task :stop { run "supervisorctl stop unicorn" }
+  task :reload { run "supervisorctl restart unicorn" }
+end
+
+namespace :nginx do
+  task :reload { sudo "nginx -s reload" }
+end
+
+namespace :deploy do
+  task :start { unicorn.start }
+  task :stop { unicorn.stop }
+  task :restart { unicorn.reload }
+  task :config { servers.link.config }
+  task :migrations do; end
+  task :migrate do; end
+end
 
 namespace :servers do
-  set :server_files, ["#{application}.conf"]
+  set :nginx_files, ["#{application}.conf"]
+
   namespace :link do
-    desc 'link server config files in file system'
     task :config do
       source_dir = "#{current_path}/config/"
-      dest_dir = '/etc/nginx/sites-enabled/'
+      dest_dir = "/etc/nginx/sites-enabled/"
 
-      server_files.each do |file|
+      nginx_files.each do |file|
         source_file = source_dir + file
         dest_file = dest_dir + file
         sudo "ln -nfs #{source_file} #{dest_file}"
       end
     end
-
-    task :maintenance do
-      source_dir = "#{current_path}/public/maintenance"
-      dest_dir = 'maintenance'
-      run_in_shared "ln -s #{source_dir} maintenance"
-    end
   end
 
-  desc 'clean server config files from file system'
   task :clean do
-    server_files.each do |file|
-      sudo "rm /etc/#{file}"
+    nginx_files.each do |file|
+      sudo "rm /etc/nginx/sites-enabled/#{file}"
     end
   end
 end
 
-# Server - Unicorn
-namespace :unicorn do
-  task :start do
-    run_in_current "supervisorctl start unicorn"
-  end
-
-  task :stop do
-    run_in_current "supervisorctl stop unicorn"
-  end
-
-  task :reload do
-    run_in_current "supervisorctl restart unicorn"
-  end
-end
-
-# Server - Nginx
-namespace :nginx do
-  desc 'reload nginx server'
-  task :reload do
-    sudo 'nginx -s reload'
-  end
-end
-
-# Deployment - Clear out default tasks that rely on deprecated libraries
-namespace :deploy do
-  task :start do
-    unicorn.start
-  end
-
-  task :stop do
-    unicorn.stop
-  end
-
-  task :restart do
-    unicorn.reload
-  end
-
-  task :config do
-    servers.link.config
-  end
-
-  task :migrations do; end
-  task :migrate do; end
-end
-
-# Dependencies
 # Bootstrap correctly
-before 'deploy:cold',         'deploy:setup'
+before "deploy:cold", "deploy:setup"
 
 # Only keep latest releases
-after 'deploy',               'deploy:cleanup'
-# after 'deploy',               'css:compile'
+after "deploy", "deploy:cleanup"
 
 # Link old server config if we rollback
-after 'rollback:default',     'servers:link:config'
-
-# Link current maintenance page
-before 'deploy:maintenance',  'servers:link:maintenance'
+after "rollback:default", "servers:link:config"
 
 # Link new server config if updated
-before 'deploy:config',       'deploy'
-after 'servers:link:config',  'nginx:reload'
+before "deploy:config",       "deploy"
+after "servers:link:config",  "nginx:reload"
