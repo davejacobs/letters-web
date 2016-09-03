@@ -27,7 +27,7 @@ set :bundle_flags,     "--deployment --quiet --binstubs=./bundler_stubs"
 # Version control - General
 set :use_sudo,         false
 set :scm_verbose,      false
-set :repository,       "git@bitbucket.org:davetypes/#{application}.git"
+set :repository,       "git@gitlab.com:davejacobs/#{application}.git"
 set :branch,           "master"
 
 namespace :unicorn do
